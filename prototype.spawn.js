@@ -57,7 +57,7 @@ module.exports = function()
         StructureSpawn.prototype.createClaimer =
             function (target) 
             {
-                return this.createCreep([TOUGH,MOVE,MOVE,CLAIM,MOVE,CLAIM],undefined, 
+                return this.createCreep([MOVE,CLAIM],undefined, 
                                         {role: 'claimer', target: target});
             };
             
@@ -101,7 +101,7 @@ module.exports = function()
             [WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,
             CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,
             MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,
-            MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,], undefined, 
+            MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE], undefined, 
                         { role: 'laborer', working: false, target: target});
         }; 
         

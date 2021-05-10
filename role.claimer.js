@@ -17,17 +17,17 @@ module.exports = {
             // }
             
             // SIGN ROOM
-            if(creep.room.controller) {
-                if(creep.signController(creep.room.controller, "Veni Vidi Vici") == ERR_NOT_IN_RANGE) {
-                        creep.moveTo(creep.room.controller);
-                }
-            }
+            // if(creep.room.controller) {
+            //     if(creep.signController(creep.room.controller, "Veni Vidi Vici") == ERR_NOT_IN_RANGE) {
+            //             creep.moveTo(creep.room.controller);
+            //     }
+            // }
             
             // CLAIM NEUTRAL ROOM
-            // if (creep.claimController(creep.room.controller) == ERR_NOT_IN_RANGE) {
-            //     // move towards the controller
-            //     creep.moveTo(creep.room.controller);
-            // }
+            if (creep.claimController(creep.room.controller) == ERR_NOT_IN_RANGE) {
+                // move towards the controller
+                creep.moveTo(creep.room.controller);
+            }
             
             
             else {

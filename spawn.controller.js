@@ -5,31 +5,21 @@ module.exports = {
     run: function(spawn)
     {
                 // Find room
+    if (spawn != undefined)
+    {
         let room = Game.rooms[spawn.room.name];
 
-        // find creeps in the room
-        let creepsInRoom = room.find(FIND_MY_CREEPS);
+                    //---- Find the number of Creeps Alive ----//
+        function getCreepCount(role)
+        {
+            return _.sum(Game.creeps, c => c.pos.roomName == room.name && c.memory.role == role);
+        }
+        function getCreepCountAll(role)
+        {
+            return _.sum(Game.creeps, c => c.memory.role == role);
+        }
 
-
-                    //---- Count the number of Creeps Alive ----//
-        let numberOfHarvesters = _.sum(creepsInRoom, (c) => c.memory.role == 'harvester');
-        let numberOfUpgraders = _.sum(creepsInRoom, (c) => c.memory.role == 'upgrader');
-        let numberOfBuilders = _.sum(creepsInRoom, (c) => c.memory.role == 'builder');
-        let numberOfRepairers = _.sum(creepsInRoom, (c) => c.memory.role == 'repairer');
-        let numberOfWallRepairers = _.sum(creepsInRoom, (c) => c.memory.role == 'wallRepairer');
-        let numberOfMiners = _.sum(creepsInRoom, (c) => c.memory.role == 'miner');
-        let numberOfExtractors = _.sum(creepsInRoom, (c) => c.memory.role == 'extractor');
-        let numberOfLorries = _.sum(creepsInRoom, (c) => c.memory.role == 'lorry');
-
-        let numberOfAttackers = _.sum(Game.creeps, (c) => c.memory.role == 'attacker');
-        let numberOfRangedAttackers = _.sum(Game.creeps, (c) => c.memory.role == 'rangedAttacker');
-        let numberOfExplorers = _.sum(Game.creep, (c) => c.memory.role == 'explorer');
-        let numberOfLongDistanceHarvestersW39N57 = _.sum(Game.creeps, (c) =>
-            c.memory.role == 'longDistanceHarvester' && c.memory.target == 'W39N57');
-
-
-
-
+        
         // energy cap
         let energy = room.energyCapacityAvailable;
         // 1000 limit to keep 5 work drones
@@ -45,17 +35,35 @@ module.exports = {
         // creep name
         let name = undefined;
 
+
+
+// Check if Spawning
+
+    let roomSpawns = room.find(FIND_MY_STRUCTURES, { filter: (s) => s.structureType == STRUCTURE_SPAWN});
+                if (spawn.spawning && roomSpawns.length > 1)
+                {
+                    room.memory.queue += 1;
+                }
+
+
+        // New fall back?
+        if (_.sum(Game.creeps, c => c.pos.roomName == room.name) == 0)
+        {
+            name = spawn.createCustomCreep(room.energyAvailable, 'harvester');
+        }
+
+
         // SET A MINER FOR EACH SOURCE WITH A CONTAINER
         let sources = room.find(FIND_SOURCES);
         for (let source of sources)
         {
-            if (!_.some(creepsInRoom, c => c.memory.role == 'miner' && c.memory.sourceId == source.id))
+            if (!_.some(Game.creeps, c => c.memory.sourceId == source.id))
             {
                 let containers = source.pos.findInRange(FIND_STRUCTURES, 1 , {
                     filter: s => s.structureType ==STRUCTURE_CONTAINER
                 });
 
-                if(containers.length > 0)
+                if(containers.length > 0 && energy > 550)
                 {
                     name = spawn.createMiner(source.id);
                     break;
@@ -68,7 +76,7 @@ module.exports = {
         if (name == undefined)
         {
             // if not enough harvesters
-            if (numberOfHarvesters < room.memory.minHarvesters) 
+            if (getCreepCount('harvester') < room.memory.minHarvesters) 
             {
                 // try to spawn one
                 name = spawn.createCustomCreep(energy, 'harvester');
@@ -76,16 +84,16 @@ module.exports = {
 
 
             // if not enough lorries
-            else if (numberOfLorries < room.memory.minLorries) 
+            else if (getCreepCount('lorry') < room.memory.minLorries) 
             {
                 // try to spawn one
                 name = spawn.createLorry(450);
             }   
             
             // fall back method
-            else if (numberOfHarvesters == 0 && numberOfLorries == 0)
+            else if (getCreepCount('harvester') == 0 && getCreepCount('lorry') == 0)
             {
-                if (numberOfMiners > 0 &&
+                if (getCreepCount('miner') > 0 &&
                     (room.storage != undefined && room.energyAvailable >= 300 + 550))
                 {
                     name = spawn.createLorry(300);
@@ -101,11 +109,11 @@ module.exports = {
 
 
             // If there's an attack flag, rally troop x3
-            else if (flag && numberOfAttackers < 3)
+            else if (flag && getCreepCountAll('attacker') < 4)
             {
                 name = spawn.createAttacker();
             }
-            else if (flag2 && numberOfRangedAttackers < 2)
+            else if (flag2 && getCreepCountAll('rangedAttacker') < 2)
             {
                 name = spawn.createRangedAttacker();
             }
@@ -114,14 +122,14 @@ module.exports = {
 
 
             // if not enough upgraders
-            else if (numberOfUpgraders < room.memory.minUpgraders) 
+            else if (getCreepCount('upgrader') < room.memory.minUpgraders) 
             {
                 // try to spawn one
                 name = spawn.createCustomCreep(energy, 'upgrader');
             }
             
             // IF EXTRACTOR
-            else if (numberOfExtractors < room.memory.minExtractor)
+            else if (getCreepCount('extractor') < room.memory.minExtractor)
             {
                 name = spawn.createExtractor();
             }
@@ -129,14 +137,14 @@ module.exports = {
             
 
             // if not enough longDistanceHarvesters for W39N57
-            else if (numberOfLongDistanceHarvestersW39N57 < room.memory.minW39N57) 
+            else if (getCreepCountAll('longDistanceHarvester') < room.memory.minW39N57) 
             {
                 // try to spawn one
                 name = spawn.createLongDistanceHarvester(energy, 4, room.name, 'W39N57', 0);
             }
             
             // if not enough repairers
-            else if (numberOfRepairers < room.memory.minRepairers) 
+            else if (getCreepCount('repairer') < room.memory.minRepairers) 
             {
                 // try to spawn one
                 name = spawn.createCustomCreep(energy, 'repairer');
@@ -157,14 +165,14 @@ module.exports = {
             }
             
             // if not enough builders
-            else if (numberOfBuilders < room.memory.minBuilders) 
+            else if (getCreepCount('builder') < room.memory.minBuilders) 
             {
                 // try to spawn one
                 name = spawn.createCustomCreep(energy, 'builder');
             }
             
             // if not enough wallRepairers
-            else if (numberOfWallRepairers < room.memory.minWallRepairers) 
+            else if (getCreepCount('wallRepairer') < room.memory.minWallRepairers) 
             {
                 // try to spawn one
                 name = spawn.createCustomCreep(energy, 'wallRepairer');
@@ -186,7 +194,7 @@ module.exports = {
         }
         
         // If there's an explore flag
-            else if (flag3 && numberOfExplorers < 1)
+            else if (flag3 && getCreepCount('explorer') < 1)
             {
                 name = spawn.createExplorer();
             } 
@@ -204,18 +212,19 @@ module.exports = {
             console.log('Log Results for : ' + room.name);
             console.log('-----------------------');
             console.log("Energy Cap = " + energy);
-            console.log("Harvesters     : " + numberOfHarvesters);
-            console.log("Upgraders      : " + numberOfUpgraders);
-            console.log("Builders       : " + numberOfBuilders);
-            console.log("Repairers      : " + numberOfRepairers);
-            console.log("Wall Repairers : " + numberOfWallRepairers);
-            if (numberOfMiners > 0)
+            console.log("Harvesters     : " + getCreepCount('harvester'));
+            console.log("Upgraders      : " + getCreepCount('upgrader'));
+            console.log("Builders       : " + getCreepCount('builder'));
+            console.log("Repairers      : " + getCreepCount('repairer'));
+            console.log("Wall Repairers : " + getCreepCount('wallRepairer'));
+            if (getCreepCount('miner') > 0)
             {
-            console.log("Lorries     : " + numberOfLorries);
+            console.log("Lorries     : " + getCreepCount('lorry'));
             }
             console.log('-----------------------');
             console.log(" Spawned new creep: " + name + " (" + Game.creeps[name].memory.role + ")");
             console.log('========================================');
         }
+    }
     }
 };

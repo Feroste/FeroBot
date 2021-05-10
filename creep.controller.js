@@ -30,7 +30,7 @@ module.exports =
         {
             default:
                 creep.memory.role = 'harvester'
-                creep.memory.working = 'false'
+                creep.memory.working = false
                 break;
             case 'harvester':
                 roles.harvester.run(creep);
