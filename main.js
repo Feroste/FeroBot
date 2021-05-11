@@ -18,7 +18,8 @@ const structures =
 
     for(let id in Game.structures)
     {
-        if(Game.structures[id].structureType == STRUCTURE_TOWER){
+        if(Game.structures[id].structureType == STRUCTURE_TOWER)
+        {
             structures.tower.run(Game.structures[id])
         }
     }
@@ -43,24 +44,29 @@ const structures =
         autorooms.run(roomName);
     }
                    
-            // --- PRINT REGULAR LOG 10 ticks --- //
-    // if (Game.time % 10 == 0 )
-    // {
-    //     console.log('// --- Status Report --- //');
-    //     console.log('Bucketed CPU: ' + Game.cpu.bucket);
-    //         // if more than 7500 cpu, make a pixel
-    //         if (Game.cpu.bucket > 7500)
-    //         {
-    //             console.log('!!! --- !!! MADE PIXEL !!! --- !!!');
-    //             Game.cpu.generatePixel();
-    //         }
-    //         else
-    //         {
-    //             let pixelpercent = Math.floor(((Game.cpu.bucket - 2500) / 5000) * 100);
-    //             console.log('Pixel Progress: ' + pixelpercent + '%');
-    //         }
-    //     console.log('// --- End   Report --- //')
-    // }
+            // --- PRINT REGULAR LOG 50 ticks --- //
+    if (Game.time % 50 == 0 )
+    {
+        console.log('// --- Status Report --- //');
+
+        console.log('Bucketed CPU: ' + Game.cpu.bucket);
+        console.log('Game Tick: ' + Game.time);
+
+
+
+            // if more than 7500 cpu, make a pixel
+            //if (Game.cpu.bucket > 7500)
+            //{
+            //    console.log('!!! --- !!! MADE PIXEL !!! --- !!!');
+            //    Game.cpu.generatePixel();
+            //}
+            //else
+            //{
+            //    let pixelpercent = Math.floor(((Game.cpu.bucket - 2500) / 5000) * 100);
+            //    console.log('Pixel Progress: ' + pixelpercent + '%');
+            //}
+        console.log('// --- End   Report --- //')
+    }
 
             // CLEAR DEAD CREEPS FROM MEMORY
     // check for memory entries of died creeps by iterating over Memory.creeps

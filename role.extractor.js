@@ -1,34 +1,8 @@
-module.exports = {
+module.exports = 
+{
     // a function to run the logic for this role
-    // run: function (creep) {
-    //     // get source
-    //     let mineral = Game.getObjectById(creep.memory.mineralId);
-    //     // find container next to source
-    //     let container = mineral.pos.findInRange(FIND_STRUCTURES, 1, {
-    //         filter: s => s.structureType == STRUCTURE_CONTAINER
-    //     })[0];
-
-    //     if (container == undefined)
-    //     {
-    //         creep.suicide()
-    //     }
-
-    //     // if creep is on top of the container
-    //     else if (creep.pos.isEqualTo(container.pos)) {
-    //         // harvest source
-    //         creep.harvest(mineral);
-    //     }
-    //     // if creep is not on top of the container
-    //     else {
-    //         // move towards it
-    //         creep.moveTo(container);
-    //     }
-    // }
-    
-    
-    
-    
-    run: function(creep) {
+    run: function(creep) 
+    {
         
         if (creep.ticksToLive < 200 && _.sum(creep.carry) == 0)
         {
@@ -36,35 +10,45 @@ module.exports = {
         }
         
         
-        if (creep.memory.extracting && creep.carryCapacity == _.sum(creep.carry)) {
+        if (creep.memory.extracting && creep.carryCapacity == _.sum(creep.carry)) 
+        {
             creep.memory.extracting = false;
         }
-        if (!creep.memory.extracting && 0 == _.sum(creep.carry)) {
+        if (!creep.memory.extracting && 0 == _.sum(creep.carry)) 
+        {
             creep.memory.extracting = true;
         }
         
-        if (creep.memory.extracting) {
+        if (creep.memory.extracting) 
+        {
             var target;
         
-            if (creep.memory.depositId) {
+            if (creep.memory.depositId) 
+            {
                 target = Game.getObjectById(creep.memory.depositId);
-            } else {
+            } else 
+            {
                 var targets = creep.room.find(FIND_MINERALS);
                 target = targets[0];
                 creep.memory.depositId = target.id;
                 creep.memory.mineralType = target.mineralType;
             }
-            if (creep.harvest(target) == ERR_NOT_IN_RANGE) {
+            if (creep.harvest(target) == ERR_NOT_IN_RANGE) 
+            {
                 creep.moveTo(target);
             }
-        } else {
+        } 
+        else 
+        {
             // if (creep.room.terminal && _.sum(creep.room.terminal.store) < 250000) {
             //     if (creep.transfer(creep.room.terminal, creep.memory.mineralType) == ERR_NOT_IN_RANGE) {
             //         creep.moveTo(creep.room.terminal);
             //     }
             // } 
-            if (creep.room.storage) {
-                if (creep.transfer(creep.room.storage, creep.memory.mineralType) == ERR_NOT_IN_RANGE) {
+            if (creep.room.storage) 
+            {
+                if (creep.transfer(creep.room.storage, creep.memory.mineralType) == ERR_NOT_IN_RANGE) 
+                {
                     creep.moveTo(creep.room.storage);
                 }
             }

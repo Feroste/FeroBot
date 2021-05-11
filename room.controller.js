@@ -98,7 +98,7 @@ module.exports =
                     }
                     else if (enemies.length < 4)
                     {
-                        room.memory.defcon = 2;
+                        room.memory.defcon = 1;
                     }
                     
                     break;
@@ -110,7 +110,7 @@ module.exports =
 
 
                     // Check defcon level
-                    if (enemies.length > 1000) // TEMP SETTING
+                    if (enemies.length > 10) // IMPORTANT STRUCTURE??
                     {
                         room.memory.defcon = 4;
                     }
@@ -121,10 +121,10 @@ module.exports =
                     
                     break;
                     
-                // DEFCON 4 - 10+ hostiles or imporant structure destroyed       [WIP]
+                // DEFCON 4 - 10+ hostiles or       imporant structure destroyed       [WIP]
                 case 4:
                     // ACTIVATE SAFE MODE
-
+                    
                     break;
             }
         }

@@ -7,13 +7,16 @@ module.exports = function()
             // create a balanced body as big as possible with the given energy
             var numberOfParts = Math.floor(energy / 200);
             var body = [];
-            for (let i = 0; i < numberOfParts; i++) {
+            for (let i = 0; i < numberOfParts; i++) 
+            {
                 body.push(WORK);
             }
-            for (let i = 0; i < numberOfParts; i++) {
+            for (let i = 0; i < numberOfParts; i++) 
+            {
                 body.push(CARRY);
             }
-            for (let i = 0; i < numberOfParts; i++) {
+            for (let i = 0; i < numberOfParts; i++) 
+            {
                 body.push(MOVE);
             }
 
@@ -27,7 +30,8 @@ module.exports = function()
         {
             // create a body with the specified number of WORK parts and one MOVE part per non-MOVE part
             var body = [];
-            for (let i = 0; i < numberOfWorkParts; i++) {
+            for (let i = 0; i < numberOfWorkParts; i++) 
+            {
                 body.push(WORK);
             }
 
@@ -35,10 +39,12 @@ module.exports = function()
             energy -= 150 * numberOfWorkParts;
 
             var numberOfParts = Math.floor(energy / 100);
-            for (let i = 0; i < numberOfParts; i++) {
+            for (let i = 0; i < numberOfParts; i++) 
+            {
                 body.push(CARRY);
             }
-            for (let i = 0; i < numberOfParts + numberOfWorkParts; i++) {
+            for (let i = 0; i < numberOfParts + numberOfWorkParts; i++) 
+            {
                 body.push(MOVE);
             }
 

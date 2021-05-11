@@ -22,8 +22,19 @@
     [WIP] Green = send workers to this room
     [WIP] Purple = long distance harvest (place on source)
 
+    
+    To-Do
+    ==============================
+    - Combat AI [||---]
+    - DEFCON system [||---]
+    - Lab Functionality [|----]
+    - Factory functionality [-----]
+    - Pickup dropped energy [-----]
+    - Whitelist / Traitor code [-----]
+    - Full Claim room functionality [|||--]
+    - Fallback methods for resource management [|||--]
 
-
+    - Empire [|---------]
 
 
 
@@ -33,15 +44,12 @@
     -- Miners now suicide when their container is missing instead of crashing entire colony
     -- Fixed errors with fresh respawn
 
-    
-    To-Do
+    1.0.2 update Log
     ==============================
-    - Combat AI
-    - finish Autorooms
-    - Fallback methods for resource management
-    - Full Claim room functionality
-    - Lab Functionality
-    - Factory functionality
-    - Finish DEFCON system
-    - Whitelist / Traitor code
-    - Pickup dropped energy
+    -- Removed Dynamic energy cap (default cap 2000)
+    -- If there are no creeps spawn a harvester with whats available
+    -- Automated claimer tasks by controller owner (attack,claim,sign)
+    -- Normalized codebase
+    -- Miners will now spawn with just 550 energy available
+    
+    .

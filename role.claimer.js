@@ -1,37 +1,49 @@
-module.exports = {
+module.exports = 
+{
     // a function to run the logic for this role
-    run: function(creep) {
-        // if in target room
-        if (creep.room.name != creep.memory.target) {
+    run: function(creep) 
+    {
+        // if not in target room
+        if (creep.room.name != creep.memory.target) 
+        {
             // find exit to target room
             var exit = creep.room.findExitTo(creep.memory.target);
             // move to exit
             creep.moveTo(creep.pos.findClosestByPath(exit));
         }
-        else {
-            
-            // ATTACK AND BLOCK ENEMY CONTROLLER
-            // if (creep.attackController(creep.room.controller) == ERR_NOT_IN_RANGE) {
-            //     // move towards the controller
-            //     creep.moveTo(creep.room.controller);
-            // }
-            
-            // SIGN ROOM
-            // if(creep.room.controller) {
-            //     if(creep.signController(creep.room.controller, "Veni Vidi Vici") == ERR_NOT_IN_RANGE) {
-            //             creep.moveTo(creep.room.controller);
-            //     }
-            // }
-            
-            // CLAIM NEUTRAL ROOM
-            if (creep.claimController(creep.room.controller) == ERR_NOT_IN_RANGE) {
-                // move towards the controller
-                creep.moveTo(creep.room.controller);
-            }
-            
-            
-            else {
-                creep.moveTo(creep.room.controller);
+        else 
+        {
+            var controller = creep.room.controller;
+            var owner = controller.owner;
+
+
+            // Decide what to do based on owner of target room
+            switch (owner)
+            {
+                // If enemy room, attack
+                default:
+                    if(creep.attackController(controller) == ERR_NOT_IN_RANGE) 
+                    {
+                        creep.moveTo(controller);
+                    }
+                    break;
+
+
+                // If my room, sign it
+                case 'Feroste':
+                    if(creep.signController(controller, "Veni Vidi Vici") == ERR_NOT_IN_RANGE) 
+                    {
+                        creep.moveTo(controller);
+                    }
+                    break;
+
+                // If neutral room, claim it
+                case 'None':
+                    if (creep.claimController(controller) == ERR_NOT_IN_RANGE) 
+                    {
+                        creep.moveTo(controller);
+                    }
+                    break;
             }
         }
     }

@@ -36,7 +36,8 @@ module.exports =
             if (creep.memory.working == true) 
             {
                 // find closest spawn or extension which is not full
-                let structure = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
+                let structure = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, 
+                {
                     // the second argument for findClosestByPath is an object which takes
                     // a property called filter which can be a function
                     // we use the arrow operator to define it
@@ -69,7 +70,8 @@ module.exports =
             // if creep is supposed to harvest energy from source
             else 
             {
-                let container = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+                let container = creep.pos.findClosestByPath(FIND_STRUCTURES, 
+                {
                     filter: s => (s.structureType == STRUCTURE_STORAGE &&
                                  s.store[RESOURCE_ENERGY] > 2000)
                                  || (s.structureType == STRUCTURE_CONTAINER &&

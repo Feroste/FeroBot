@@ -1,26 +1,32 @@
 var roleChange = require('role.builder')
 
-module.exports = {
+module.exports = 
+{
     // a function to run the logic for this role
     /** @param {Creep} creep */
-    run: function(creep) {
+    run: function(creep) 
+    {
         // if creep is bringing energy to a structure but has no energy left
-        if (creep.memory.working == true && creep.carry.energy == 0) {
+        if (creep.memory.working == true && creep.carry.energy == 0) 
+        {
             // switch state
             creep.memory.working = false;
             creep.say('Collecting');
         }
         // if creep is harvesting energy but is full
-        else if (creep.memory.working == false && creep.carry.energy == creep.carryCapacity) {
+        else if (creep.memory.working == false && creep.carry.energy == creep.carryCapacity) 
+        {
             // switch state
             creep.memory.working = true;
             creep.say('Hauling');
         }
 
         // if creep is supposed to transfer energy to a structure
-        if (creep.memory.working == true) {
+        if (creep.memory.working == true) 
+        {
             // find closest spawn, extension or tower which is not full
-            let structure = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
+            let structure = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, 
+            {
                 // the second argument for findClosestByPath is an object which takes
                 // a property called filter which can be a function
                 // we use the arrow operator to define it
@@ -41,9 +47,11 @@ module.exports = {
             }
 
             // if we found one
-            if (structure != undefined) {
+            if (structure != undefined) 
+            {
                 // try to transfer energy, if it is not in range
-                if (creep.transfer(structure, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                if (creep.transfer(structure, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) 
+                {
                     // move towards it
                     creep.moveTo(structure, {visualizePathStyle: {stroke:'yellow', lineStyle: 'solid', opacity: .5}});
                 }
@@ -59,20 +67,25 @@ module.exports = {
             }
         }
         // if creep is supposed to get energy
-        else {
+        else 
+        {
             // find closest container
-            let container = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+            let container = creep.pos.findClosestByPath(FIND_STRUCTURES, 
+            {
                 filter: s => s.structureType == STRUCTURE_CONTAINER && s.store[RESOURCE_ENERGY] > 300
             });
 
-            if (container == undefined) {
+            if (container == undefined) 
+            {
                 container = creep.room.storage;
             }
 
             // if one was found
-            if (container != undefined) {
+            if (container != undefined) 
+            {
                 // try to withdraw energy, if the container is not in range
-                if (creep.withdraw(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                if (creep.withdraw(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) 
+                {
                     // move towards it
                     creep.moveTo(container, {visualizePathStyle: {stroke:'yellow', lineStyle: 'dashed', opacity: .5}});
                 }
