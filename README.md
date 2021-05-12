@@ -25,14 +25,17 @@
     
     To-Do
     ==============================
+    -claimer still not working correctly
+    -pass attack flag into attack role
+    
     - Combat AI [||---]
-    - DEFCON system [||---]
+    - DEFCON system [|||--]
     - Lab Functionality [|----]
     - Factory functionality [-----]
     - Pickup dropped energy [-----]
     - Whitelist / Traitor code [-----]
     - Full Claim room functionality [|||--]
-    - Fallback methods for resource management [|||--]
+    - Fallback methods for resource management [||||-]
 
     - Empire [|---------]
 
@@ -52,4 +55,13 @@
     -- Normalized codebase
     -- Miners will now spawn with just 550 energy available
     
+    1.0.3 update Log
+    ==============================
+    -- Attack role now functions regardless of flag so they can be spawned elsewhere
+        -- still need to pass flag into attack role instead of declaring so defenders dont run off
+    -- DEFCON system now spawns defenders (attackFlag is for now Use at own risk)
+    -- If no harvesters or lorries look for a miner and spawn a lorry, else harvester with whats available
+    -- Changed pixel generation to work with new update
+
+
     .

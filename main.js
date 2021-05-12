@@ -54,17 +54,17 @@ const structures =
 
 
 
-            // if more than 7500 cpu, make a pixel
-            //if (Game.cpu.bucket > 7500)
-            //{
-            //    console.log('!!! --- !!! MADE PIXEL !!! --- !!!');
-            //    Game.cpu.generatePixel();
-            //}
-            //else
-            //{
-            //    let pixelpercent = Math.floor(((Game.cpu.bucket - 2500) / 5000) * 100);
-            //    console.log('Pixel Progress: ' + pixelpercent + '%');
-            //}
+            // if 10,000 cpu, make a pixel
+            if (Game.cpu.bucket < 10000)
+            {
+                let pixelpercent = Math.floor((Game.cpu.bucket/ 10000) * 100);
+                console.log('Pixel Progress: ' + pixelpercent + '%');
+            }
+            else
+            {
+               console.log('!!! --- !!! MADE PIXEL !!! --- !!!');
+               Game.cpu.generatePixel();
+            }
         console.log('// --- End   Report --- //')
     }
 

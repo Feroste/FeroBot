@@ -17,7 +17,7 @@ module.exports =
             var owner = controller.owner;
 
 
-            // Decide what to do based on owner of target room
+            // Decide what to do based on owner of target room    THIS IS NOT WORKING
             switch (owner)
             {
                 // If enemy room, attack

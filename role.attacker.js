@@ -2,15 +2,20 @@ module.exports =
 {
     run: function(creep) 
     {
-        // Check for attackFlag
-            let flag = Game.flags.attackFlag;
-        
-        // Check to see if in the same room
-        if (flag != undefined && creep.pos.roomName == flag.pos.roomName) 
-        {
 
-            let newspawn = creep.room.find(FIND_HOSTILE_SPAWNS);
-            let spawnTarget = creep.pos.findClosestByPath(newspawn);
+        let flag = Game.flags.attackFlag;
+
+        // Check for attackFlag and move towards the room
+        if (flag != undefined && creep.pos.roomName != flag.pos.roomName)
+        {
+                creep.moveTo(flag);
+        }
+
+        // If in the right room
+        else
+        {
+            let enemyspawn = creep.room.find(FIND_HOSTILE_SPAWNS);
+            let spawnTarget = creep.pos.findClosestByPath(enemyspawn);
             
             let hostiles = creep.room.find(FIND_HOSTILE_CREEPS);
             let target = creep.pos.findClosestByPath(hostiles);
@@ -33,18 +38,10 @@ module.exports =
                         creep.moveTo(spawnTarget);
                     }
             }
-            
-            // No target, Move to flag
-            else
+            else if (flag != undefined)
             {
                 creep.moveTo(flag);
             }
-        }
-        
-        // If not in same room, Move to flag
-        else if (flag != undefined) 
-        {
-            creep.moveTo(flag);
         }
     }
 };

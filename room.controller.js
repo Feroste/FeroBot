@@ -16,6 +16,8 @@ module.exports =
             room.memory.minExtractor = 0;
             room.memory.energyLimit = 2000;
             room.memory.queue = 0;
+            room.memory.defcon = 0;
+            room.memory.defenders = 0;
         }
 
 
@@ -43,11 +45,13 @@ module.exports =
                 // DEFCON 0 - No hostiles
                 default:
                     room.memory.defcon = 0;
+                    room.memory.defenders = 0;
                     break;
                 case 0:
                     // Normal Operations
                     delete room.memory.combatTicks;
                     delete room.memory.manTowers;
+                    room.memory.defenders = 0;
 
                     // Check defcon level
                     if (enemies.length > 0)
@@ -61,6 +65,9 @@ module.exports =
                     
                 // DEFCON 1 - Up to 3 hostiles
                 case 1:
+                    // Spawn 1 defender
+                    room.memory.defenders = 1;
+
                     // Prioritize Towers [WIP]
                     room.memory.manTowers = 1;
 
@@ -81,6 +88,7 @@ module.exports =
                     }
                     else if (!enemies.length)
                     {
+                        room.memory.defenders = 0;
                         room.memory.defcon = 0;
                     }
 
@@ -88,7 +96,8 @@ module.exports =
                     
                 // DEFCON 2 - 4+ hostiles or L1 for 200 ticks
                 case 2:
-                    // Spawn 2 defenders [WIP]
+                    // Spawn 1 more defender
+                    room.memory.defenders = 2;
 
 
                     // Check defcon level
@@ -98,6 +107,7 @@ module.exports =
                     }
                     else if (enemies.length < 4)
                     {
+                        room.memory.defenders = 1;
                         room.memory.defcon = 1;
                     }
                     
@@ -105,17 +115,18 @@ module.exports =
                     
                 // DEFCON 3 - 6+ hostiles or L2 for 500 ticks
                 case 3:
-                    // Spawn 2 more defenders [WIP]
-
+                    // Spawn 2 more defenders
+                    room.memory.defenders = 4;
 
 
                     // Check defcon level
-                    if (enemies.length > 10) // IMPORTANT STRUCTURE??
+                    if (enemies.length > 10) // IMPORTANT STRUCTURE????
                     {
-                        room.memory.defcon = 4;
+                        room.memory.defcon = 3;     // 4
                     }
                     else if (enemies.length < 6)
                     {
+                        room.memory.defenders = 2;
                         room.memory.defcon = 2;
                     }
                     

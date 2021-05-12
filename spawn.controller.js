@@ -44,29 +44,22 @@ module.exports =
                     {
                         room.memory.queue += 1;
                     }
+                    
+                    
 
-
-
-
-            // If no creeps spawn Harvester with energy available
-            if ((_.sum(Game.creeps, c => c.pos.roomName == room.name) == 0) && room.energyAvailable > 200)
+            // fall back method
+            if (getCreepCount('harvester') == 0 && getCreepCount('lorry') == 0)
             {
-                name = spawn.createCustomCreep(room.energyAvailable, 'harvester');
+                if (getCreepCount('miner') > 0 &&
+                    (room.storage != undefined && room.energyAvailable >= 300 + 550))
+                {
+                    name = spawn.createLorry(300);
+                }
+                else
+                {
+                    name = spawn.createCustomCreep(room.energyAvailable, 'harvester');
+                }
             }
-
-                            // fall back method
-                //else if (getCreepCount('harvester') == 0 && getCreepCount('lorry') == 0)
-                //{
-                //    if (getCreepCount('miner') > 0 &&
-                //        (room.storage != undefined && room.energyAvailable >= 300 + 550))
-                //    {
-                //        name = spawn.createLorry(300);
-                //    }
-                //    else
-                //    {
-                //        name = spawn.createCustomCreep(room.energyAvailable, 'harvester');
-                //    }
-                //}
 
 
             // SET A MINER FOR EACH SOURCE WITH A CONTAINER
@@ -87,6 +80,12 @@ module.exports =
                 }
             }
 
+            if (getCreepCount('attacker') < room.memory.defenders)
+            {
+                name = spawn.createAttacker();
+            }
+
+
 
             if (name == undefined)
             {
@@ -106,8 +105,8 @@ module.exports =
                 }   
                 
 
-                // If there's an attack flag, rally troop x3
-                else if (flag && getCreepCountAll('attacker') < 3)
+                // If there's an attack flag, rally troops
+                else if (flag && getCreepCountAll('attacker') < 1)
                 {
                     name = spawn.createAttacker();
                 }
