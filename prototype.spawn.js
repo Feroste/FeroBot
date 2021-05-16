@@ -69,10 +69,10 @@ module.exports = function()
             
         // ATTACKER
         StructureSpawn.prototype.createAttacker =
-            function ()
+            function (target)
             {
                 return this.createCreep([TOUGH,TOUGH,TOUGH, MOVE,MOVE, MOVE, ATTACK, MOVE, ATTACK,MOVE, ATTACK,MOVE, ATTACK,MOVE, ATTACK,MOVE, ATTACK,MOVE], undefined, 
-                                        {role: 'attacker'});
+                                        {role: 'attacker', target: target});
             };
         // RANGED ATTACKER
         StructureSpawn.prototype.createRangedAttacker =

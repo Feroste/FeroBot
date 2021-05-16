@@ -22,7 +22,7 @@ module.exports =
             {
                 // If enemy room, attack
                 default:
-                    if(creep.attackController(controller) == ERR_NOT_IN_RANGE) 
+                    if(creep.claimController(controller) == ERR_NOT_IN_RANGE) 
                     {
                         creep.moveTo(controller);
                     }
@@ -39,7 +39,7 @@ module.exports =
 
                 // If neutral room, claim it
                 case 'None':
-                    if (creep.claimController(controller) == ERR_NOT_IN_RANGE) 
+                    if (creep.attackController(controller) == ERR_NOT_IN_RANGE) 
                     {
                         creep.moveTo(controller);
                     }

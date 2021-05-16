@@ -8,7 +8,7 @@
     Buy energy
         ex. Game.market.createOrder('buy',RESOURCE_ENERGY,.4,250000,'W39N59')
     Manual Creep
-    Game.spawns.Spawn1.createCreep([WORK,WORK,CARRY,CARRY,MOVE,MOVE], undefined, {target: 'E12S21', role: 'harvester', working: false})
+    Game.spawns.Spawn1.createCreep([WORK,WORK,CARRY,CARRY,MOVE,MOVE,WORK,WORK,CARRY,CARRY,MOVE,MOVE], undefined, {target: 'E14S22', role: 'harvester', working: false})
 
     Flags
     -----------------
@@ -26,9 +26,8 @@
     To-Do
     ==============================
     -claimer still not working correctly
-    -pass attack flag into attack role
     
-    - Combat AI [||---]
+    - Combat AI [|||--]
     - DEFCON system [|||--]
     - Lab Functionality [|----]
     - Factory functionality [-----]
@@ -62,6 +61,14 @@
     -- DEFCON system now spawns defenders (attackFlag is for now Use at own risk)
     -- If no harvesters or lorries look for a miner and spawn a lorry, else harvester with whats available
     -- Changed pixel generation to work with new update
+
+    1.0.4 update Log
+    ==============================
+    -- Fixed a TypeError when moving through a room with no controller [hallways]
+    -- Attacker role now uses target memory to determine behavior, attackers spawned with flags are independent of those spawned with DEFCON
+    -- Changed room initialization to a base set of workers 1 harvester/builder/upgrader/repairer, 5 work/carry/move cap.
+        this will help make claiming new rooms more seemless later as a room can be self sufficient with just a spawn ASAP
+        -- added newSpawn variable to be used for sending help to a freshly claimed room
 
 
     .

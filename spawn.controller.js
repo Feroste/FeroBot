@@ -18,6 +18,10 @@ module.exports =
             {
                 return _.sum(Game.creeps, c => c.memory.role == role);
             }
+            function findAttackers(target)
+            {
+                return _.sum(Game.creeps, c => c.memory.target == target && c.memory.role == 'attacker');
+            }
 
             
             // energy cap
@@ -82,7 +86,7 @@ module.exports =
 
             if (getCreepCount('attacker') < room.memory.defenders)
             {
-                name = spawn.createAttacker();
+                name = spawn.createAttacker(-1);
             }
 
 
@@ -105,10 +109,19 @@ module.exports =
                 }   
                 
 
+
+
+
+
+
+
                 // If there's an attack flag, rally troops
-                else if (flag && getCreepCountAll('attacker') < 1)
+
+
+
+                else if (flag && findAttackers(flag.pos.roomName) < 1)
                 {
-                    name = spawn.createAttacker();
+                    name = spawn.createAttacker(flag.pos.roomName);
                 }
                 else if (flag2 && getCreepCountAll('rangedAttacker') < 2)
                 {
