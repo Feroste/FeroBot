@@ -30,7 +30,10 @@ module.exports =
             // If not in target room, move towards room
             if (creep.pos.roomName != target)
             {
-                creep.moveTo(target);
+                // find exit to target
+                var exit = creep.room.findExitTo(target);
+                // and move to exit
+                creep.moveTo(creep.pos.findClosestByPath(exit));
             }
 
             // If in the right room

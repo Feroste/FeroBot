@@ -25,7 +25,16 @@
     
     To-Do
     ==============================
-    -claimer still not working correctly
+    -claimer still not working correctly [fixed?]
+    -more progressive body building
+    -find closest room with enough energy for remote spawns
+    -search by flag color/ name wildcards
+    -properly iterate over long distance harvesters so they aren't hard coded
+    -long distance mining overhaul
+        -miner/harvester
+        -build
+        -repair
+        -check for hostiles?
     
     - Combat AI [|||--]
     - DEFCON system [|||--]
@@ -36,7 +45,7 @@
     - Full Claim room functionality [|||--]
     - Fallback methods for resource management [||||-]
 
-    - Empire [|---------]
+    - Empire [||--------]
 
 
 
@@ -69,6 +78,14 @@
     -- Changed room initialization to a base set of workers 1 harvester/builder/upgrader/repairer, 5 work/carry/move cap.
         this will help make claiming new rooms more seemless later as a room can be self sufficient with just a spawn ASAP
         -- added newSpawn variable to be used for sending help to a freshly claimed room
+
+    1.0.5 update Log
+    ==============================
+    -- Fixed flag attackers
+    -- Fixed claimer?
+    -- Long Distance harvesters no longer get confused about what room they're supposed to be in when role changing
+    -- Put an 8 room range on attackFlag spawning
+    -- When a miner is spawned it will increase min Lorries to 1 if it is 0
 
 
     .

@@ -6,7 +6,9 @@ module.exports =
     run: function (creep) 
     {
         // if target is defined and creep is not in target room
-        if (creep.memory.target != undefined && creep.room.name != creep.memory.target) 
+            // Exclude long distance harvesters so they dont get confused when role changing
+        if (creep.memory.target != undefined && creep.room.name != creep.memory.target 
+            && creep.memory.role != 'longDistanceHarvester') 
         {
             // find exit to target room
             var exit = creep.room.findExitTo(creep.memory.target);

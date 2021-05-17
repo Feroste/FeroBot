@@ -24,7 +24,7 @@ module.exports = function()
             return this.createCreep(body, undefined, { role: roleName, working: false });
         };
 
-    // create a new function for StructureSpawn
+    // Long Distance Harvester
     StructureSpawn.prototype.createLongDistanceHarvester =
         function (energy, numberOfWorkParts, home, target, sourceIndex) 
         {
@@ -64,7 +64,7 @@ module.exports = function()
             function (target) 
             {
                 return this.createCreep([MOVE,CLAIM],undefined, 
-                                        {role: 'claimer', target: target});
+                                        {role: 'claimer', target: target, claim: 1});
             };
             
         // ATTACKER

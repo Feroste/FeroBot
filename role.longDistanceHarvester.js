@@ -1,4 +1,4 @@
-var roleChange = require('role.upgrader');
+var roleChange = require('role.builder');
 
 module.exports = 
 {

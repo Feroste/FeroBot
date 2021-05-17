@@ -29,12 +29,14 @@ module.exports =
             {
                         //////////---Spawn Logic---//////////
 
-
+                // Find Spawns
             let roomSpawns = room.find(FIND_MY_STRUCTURES, { filter: (s) => s.structureType == STRUCTURE_SPAWN});
             if (room.memory.queue >= roomSpawns.length)
             {
+                // If queue is more than number of spawns, reset it
                 room.memory.queue = 0;
             }
+                // Run logic on queued spawn
                 spawnLogic.run(roomSpawns[room.memory.queue]);
 
 

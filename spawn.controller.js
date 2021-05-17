@@ -14,13 +14,9 @@ module.exports =
             {
                 return _.sum(Game.creeps, c => c.pos.roomName == room.name && c.memory.role == role);
             }
-            function getCreepCountAll(role)
+            function find(role, target)
             {
-                return _.sum(Game.creeps, c => c.memory.role == role);
-            }
-            function findAttackers(target)
-            {
-                return _.sum(Game.creeps, c => c.memory.target == target && c.memory.role == 'attacker');
+                return _.sum(Game.creeps, c => c.memory.target == target && c.memory.role == role);
             }
 
             
@@ -46,9 +42,9 @@ module.exports =
             let roomSpawns = room.find(FIND_MY_STRUCTURES, { filter: (s) => s.structureType == STRUCTURE_SPAWN});
                     if (spawn.spawning && roomSpawns.length > 1)
                     {
+                        // If more than 1 spawn and its spawning, increase the queue
                         room.memory.queue += 1;
                     }
-                    
                     
 
             // fall back method
@@ -80,16 +76,19 @@ module.exports =
                     if(containers.length && energy >= 550)
                     {
                         name = spawn.createMiner(source.id);
+                        if (room.memory.minLorries == 0)
+                        {
+                            room.memory.minLorries = 1;
+                        }
                     }
                 }
             }
 
+            // SPAWN DEFENDERS
             if (getCreepCount('attacker') < room.memory.defenders)
             {
                 name = spawn.createAttacker(-1);
             }
-
-
 
             if (name == undefined)
             {
@@ -108,28 +107,18 @@ module.exports =
                     name = spawn.createLorry(450);
                 }   
                 
-
-
-
-
-
-
-
                 // If there's an attack flag, rally troops
-
-
-
-                else if (flag && findAttackers(flag.pos.roomName) < 1)
+                // only if 8 rooms distance or less
+                else if (flag && find('attacker', flag.pos.roomName) < 1 
+                && Game.map.getRoomLinearDistance(room.name, flag.pos.roomName) <= 8)
                 {
                     name = spawn.createAttacker(flag.pos.roomName);
                 }
-                else if (flag2 && getCreepCountAll('rangedAttacker') < 2)
-                {
-                    name = spawn.createRangedAttacker();
-                }
 
-
-
+                // else if (flag2 && getCreepCountAll('rangedAttacker') < 2)
+                // {
+                //     name = spawn.createRangedAttacker();
+                // }
 
                 // if not enough upgraders
                 else if (getCreepCount('upgrader') < room.memory.minUpgraders) 
@@ -144,15 +133,28 @@ module.exports =
                     name = spawn.createExtractor();
                 }
                 
-                
 
-                // if not enough longDistanceHarvesters for W39N57
-                else if (getCreepCountAll('longDistanceHarvester') < room.memory.minW39N57) 
+                // if not enough longDistanceHarvesters for E17S23
+                else if (find('longDistanceHarvester', 'E17S23') < room.memory.minE17S23) 
                 {
                     // try to spawn one
-                    name = spawn.createLongDistanceHarvester(energy, 4, room.name, 'W39N57', 0);
+                    name = spawn.createLongDistanceHarvester(energy, 1, room.name, 'E17S23', 0);
                 }
-                
+
+                // if not enough longDistanceHarvesters for E16S22
+                else if (find('longDistanceHarvester', 'E16S22') < room.memory.minE16S22) 
+                {
+                    // try to spawn one
+                    name = spawn.createLongDistanceHarvester(energy, 1, room.name, 'E16S22', 0);
+                }
+
+                // if not enough longDistanceHarvesters for E17S21
+                else if (find('longDistanceHarvester', 'E17S21') < room.memory.minE17S21) 
+                {
+                    // try to spawn one
+                    name = spawn.createLongDistanceHarvester(energy, 1, room.name, 'E17S21', 0);
+                }
+
                 // if not enough repairers
                 else if (getCreepCount('repairer') < room.memory.minRepairers) 
                 {
