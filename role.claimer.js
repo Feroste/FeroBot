@@ -14,15 +14,26 @@ module.exports =
         else 
         {
             
-            var controller = creep.room.controller;
-            var owner = controller.owner.username;
+            let controller = creep.room.controller;
+            var owner = undefined;
+            if (controller.owner != undefined)
+            {
+                // Set Owner
+                owner = controller.owner.username;
+                if (!controller.my)
+                {
+                // Set Enemy
+                owner = 'ENEMY';
+                }
+            }
+            
 
             // Decide what to do based on owner of target room
             switch (owner)
             {
-                // If neutral, check for claim signal (creep.memory.claim = 1)
+                // If neutral, check for claim signal (creep.memory.order = 1)
                 default:
-                    if (creep.memory.claim == 1)
+                    if (creep.memory.order == 1)
                     {
                         // CLAIM
                         if(creep.claimController(controller) == ERR_NOT_IN_RANGE) 
@@ -30,7 +41,7 @@ module.exports =
                             creep.moveTo(controller);
                         }
                     }
-                    else                                        // ADD A TRY CHECK IF INVALID NEUTRAL SO SWITCH TO ATTACK
+                    else                     // ADD A TRY CHECK IF INVALID NEUTRAL SO SWITCH TO ATTACK
                     {
                         // RESERVE [Currenty delete claim memory to reserve]
                         if(creep.reserveController(controller) == ERR_NOT_IN_RANGE) 
@@ -49,7 +60,7 @@ module.exports =
                     }
                     break;
 
-                // If ENEMY, attack [add names]
+                // If ENEMY, attack
                 case 'ENEMY':
                     if (creep.attackController(controller) == ERR_NOT_IN_RANGE) 
                     {

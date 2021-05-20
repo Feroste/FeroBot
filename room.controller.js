@@ -44,6 +44,30 @@ module.exports =
 
 
                 // ----- // DEFCON SYSTEM // ----- //
+                function checkDefcon()
+                {
+                    // Check defcon level       Still no lvl 4
+                    if (enemies.length > 4 || room.memory.combatTicks > 1000) // IMPORTANT STRUCTURE????
+                    {
+                        room.memory.defcon = 3;
+                    }
+                    else if (enemies.length > 2 || room.memory.combatTicks > 300)
+                    {
+                        room.memory.defenders = 2;
+                        room.memory.defcon = 2;
+                    }
+                    else if (enemies.length > 0)
+                    {
+                        room.memory.defcon = 1;
+                        room.memory.combatTicks = 0;
+                    }
+                    else if (!enemies.length)
+                    {
+                        room.memory.defenders = 0;
+                        room.memory.defcon = 0;
+                    }
+                }
+
                 let enemies = room.find(FIND_HOSTILE_CREEPS);
 
                 switch(room.memory.defcon)
@@ -60,16 +84,12 @@ module.exports =
                         room.memory.defenders = 0;
 
                         // Check defcon level
-                        if (enemies.length > 0)
-                        {
-                            room.memory.defcon = 1;
-                            room.memory.combatTicks = 0;
-                        }
+                        checkDefcon();
                         break;
 
                     //----------------------------
                         
-                    // DEFCON 1 - Up to 3 hostiles
+                    // DEFCON 1 - Up to 2 hostiles
                     case 1:
                         // Spawn 1 defender
                         room.memory.defenders = 1;
@@ -88,60 +108,35 @@ module.exports =
                         room.memory.combatTicks = room.memory.combatTicks + 1;
 
                         // Check defcon level
-                        if (enemies.length > 3 || room.memory.combatTicks > 200)
-                        {
-                            room.memory.defcon = 2;
-                        }
-                        else if (!enemies.length)
-                        {
-                            room.memory.defenders = 0;
-                            room.memory.defcon = 0;
-                        }
-
+                        checkDefcon();
                         break;
                         
-                    // DEFCON 2 - 4+ hostiles or L1 for 200 ticks
+                    // DEFCON 2 - 3+ hostiles or L1 for 500 ticks
                     case 2:
                         // Spawn 1 more defender
                         room.memory.defenders = 2;
 
-
                         // Check defcon level
-                        if (enemies.length > 5 || room.memory.combatTicks > 700)
-                        {
-                            room.memory.defcon = 3;
-                        }
-                        else if (enemies.length < 4)
-                        {
-                            room.memory.defenders = 1;
-                            room.memory.defcon = 1;
-                        }
-                        
+                        checkDefcon();
                         break;
                         
-                    // DEFCON 3 - 6+ hostiles or L2 for 500 ticks
+                    // DEFCON 3 - 5+ hostiles or L2 for 1000 ticks
                     case 3:
                         // Spawn 2 more defenders
                         room.memory.defenders = 4;
 
 
                         // Check defcon level
-                        if (enemies.length > 10) // IMPORTANT STRUCTURE????
-                        {
-                            room.memory.defcon = 3;     // 4
-                        }
-                        else if (enemies.length < 6)
-                        {
-                            room.memory.defenders = 2;
-                            room.memory.defcon = 2;
-                        }
-                        
+                        checkDefcon();
                         break;
                         
-                    // DEFCON 4 - 10+ hostiles or       imporant structure destroyed       [WIP]
+                    // DEFCON 4 - 8+ hostiles or       imporant structure destroyed       [WIP]
                     case 4:
                         // ACTIVATE SAFE MODE
                         
+
+                        // Check defcon level
+                        checkDefcon();
                         break;
                 }
             }

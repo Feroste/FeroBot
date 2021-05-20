@@ -22,12 +22,24 @@ module.exports =
             
             // energy cap
             let energy = room.energyCapacityAvailable;
+            // Hard cap for spawning military
+            let hardCap = (energy - 300)
+                if (hardCap <= 0)
+                {
+                    hardCap = 0;
+                }
+                if (hardCap >= 2000)
+                {
+                    hardCap = 2000;
+                }
             // 1000 limit to keep 5 work drones
             if (room.memory.energyLimit != undefined)
             {
                 let energyLimit = room.memory.energyLimit;
                 if (energy > energyLimit) {energy = energyLimit;}
             }
+
+
             // attackFlag and attack2Flag
             let flag = Game.flags.attackFlag;
             let flag2 = Game.flags.attack2Flag;
@@ -87,7 +99,7 @@ module.exports =
             // SPAWN DEFENDERS
             if (getCreepCount('attacker') < room.memory.defenders)
             {
-                name = spawn.createAttacker(-1);
+                name = spawn.createAttacker(hardCap, -1);
             }
 
             if (name == undefined)
@@ -112,7 +124,7 @@ module.exports =
                 else if (flag && find('attacker', flag.pos.roomName) < 1 
                 && Game.map.getRoomLinearDistance(room.name, flag.pos.roomName) <= 8)
                 {
-                    name = spawn.createAttacker(flag.pos.roomName);
+                    name = spawn.createAttacker(hardCap, flag.pos.roomName);
                 }
 
                 // else if (flag2 && getCreepCountAll('rangedAttacker') < 2)
@@ -195,13 +207,22 @@ module.exports =
             else if (room.memory.claimRoom != undefined) 
             {
                 //  try to spawn a claimer
-                name = spawn.createClaimer(room.memory.claimRoom);
+                name = spawn.createClaimer(room.memory.claimRoom, 1);
                     
                 //   if that worked
                 if (!(name < 0)) 
                 {
                 //  delete the claim order
                     delete room.memory.claimRoom;
+                }
+            }
+
+            // If we need reservers
+            else if (room.memory.reserveRoom0 != undefined)
+            {
+                if (find('claimer', room.memory.reserveRoom0) < 1)
+                {
+                    name = spawn.createClaimer(room.memory.reserveRoom0, -1);
                 }
             }
             

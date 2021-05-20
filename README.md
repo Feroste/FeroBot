@@ -5,6 +5,8 @@
 
     Claim a room
         ex.   Game.rooms.ROOMNAME.memory.claimRoom = 'W12N21'
+        ex.   Game.rooms.ROOMNAME.memory.reserveRoom0 = 'W21N12'
+
     Buy energy
         ex. Game.market.createOrder('buy',RESOURCE_ENERGY,.4,250000,'W39N59')
     Manual Creep
@@ -25,9 +27,8 @@
     
     To-Do
     ==============================
-    -claimer still not working correctly [fixed?]
     -more progressive body building
-    -find closest room with enough energy for remote spawns
+    -find closest room with enough energy for remote spawns [needs implementation]
     -search by flag color/ name wildcards
     -properly iterate over long distance harvesters so they aren't hard coded
     -long distance mining overhaul
@@ -35,6 +36,7 @@
         -build
         -repair
         -check for hostiles?
+    
     
     - Combat AI [|||--]
     - DEFCON system [|||--]
@@ -87,5 +89,16 @@
     -- Put an 8 room range on attackFlag spawning
     -- When a miner is spawned it will increase min Lorries to 1 if it is 0
 
+    1.0.6 update Log
+    ==============================
+    -- Claimer fully functional (make sure to set your name and message in role.claimer)
+    -- added a room memory variable to reserve nearby rooms
+        Reserve claimers are spawned with 1300 energy
+    -- Fixed a bug with defcon 3 not reseting when enemies are gone, added a function and trimmed some code
+        refined defcon update conditions (defenders can take a while to spawn, potential issue)
+        successfully defended against large invader force
+    -- Added a seperate hard energy cap for military units (Will leave 300 energy will not use more than 2000)
+    -- Attackers now have progressive body building and can be spawned with only 190 energy (need at least 490 available)
+        with energy cap this is a 40 part 10 attack creep.
 
     .
