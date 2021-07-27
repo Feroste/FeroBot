@@ -1,3 +1,4 @@
+const subroutine = require('creep.subroutines');
 const roles = 
 {
     // Main Roles
@@ -15,10 +16,7 @@ const roles =
 
     // Niche Roles
     attacker: require('role.attacker'),
-    rangedAttacker: require('role.rangedAttacker'),
-    claimer: require('role.claimer'),
-    laborer: require('role.laborer'),
-    explorer: require('role.explorer')  
+    claimer: require('role.claimer')
 }
 
 
@@ -60,10 +58,6 @@ module.exports =
                 roles.attacker.run(creep);
                 break;
                 
-            case 'rangedAttacker':
-                roles.rangedAttacker.run(creep);
-                break;
-                
             case 'miner':
                 roles.miner.run(creep);
                 break;
@@ -79,14 +73,19 @@ module.exports =
             case 'claimer':
                 roles.claimer.run(creep);
                 break;
-                
-            case 'laborer':
-                roles.laborer.run(creep);
-                break;
-            
-            case 'explorer':
-                roles.explorer.run(creep);
-                break;
         }
+
+        // if (creep.memory.initialized == null)
+        // {
+        //     creep.memory.initialized = 1;
+        //     creep.memory.
+        // }
+
+
+
+
+
+
+
     }
 };

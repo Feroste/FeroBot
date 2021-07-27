@@ -1,4 +1,5 @@
 const spawnLogic = require('spawn.controller');
+const towerLogic = require('tower.controller');
 
 module.exports = 
 {
@@ -36,10 +37,24 @@ module.exports =
                 // If queue is more than number of spawns, reset it
                 room.memory.queue = 0;
             }
-                // Run logic on queued spawn
-                spawnLogic.run(roomSpawns[room.memory.queue]);
+                // Make sure there is a spawn in the room
+                if (roomSpawns[room.memory.queue] != undefined)
+                {
+                    // Run logic on queued spawn
+                    spawnLogic.run(roomSpawns[room.memory.queue]);
+                }
 
 
+
+           //----------//  TURRET CONTROL  //----------//
+            
+           // Find towers in the room
+           let roomTowers = room.find(FIND_MY_STRUCTURES, {filter: (s) => s.structureType == STRUCTURE_TOWER});
+           // Run logic for each of them
+           for(let index in roomTowers)
+           {
+                towerLogic.run(roomTowers[index]);
+           }
 
 
 

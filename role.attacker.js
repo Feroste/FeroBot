@@ -1,3 +1,5 @@
+const subroutine = require('creep.subroutines');
+
 module.exports = 
 {
     run: function(creep) 
@@ -27,13 +29,11 @@ module.exports =
         // Attacker [working?]
         else
         {
-            // If not in target room, move towards room
-            if (creep.pos.roomName != target)
+            // if not in target room
+            if (creep.memory.target != undefined && creep.room.name != creep.memory.target) 
             {
-                // find exit to target
-                var exit = creep.room.findExitTo(target);
-                // and move to exit
-                creep.moveTo(creep.pos.findClosestByPath(exit));
+                // move towards it
+                subroutine.moveToRoom(creep);
             }
 
             // If in the right room

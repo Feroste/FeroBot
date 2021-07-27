@@ -1,15 +1,15 @@
+const subroutine = require('creep.subroutines');
+
 module.exports = 
 {
     // a function to run the logic for this role
     run: function(creep) 
     {
         // if not in target room
-        if (creep.room.name != creep.memory.target) 
+        if (creep.memory.target != undefined && creep.room.name != creep.memory.target) 
         {
-            // find exit to target room
-            var exit = creep.room.findExitTo(creep.memory.target);
-            // move to exit
-            creep.moveTo(creep.pos.findClosestByPath(exit));
+            // move towards it
+            subroutine.moveToRoom(creep);
         }
         else 
         {

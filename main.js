@@ -3,34 +3,22 @@
 */
 
 // import controllers
-const screeps = require('creep.controller');
-const autorooms = require('room.controller');
-const structures =
-{
-    tower: require('structure.tower')
-}
+const screepLogic = require('creep.controller');
+const roomLogic = require('room.controller');
 
             //  //  //-----Main Loop START-----//  //  //
                 module.exports.loop = function () 
 {
-    
-           //----------//  TURRET CONTROL  //----------//
 
-    for(let id in Game.structures)
-    {
-        if(Game.structures[id].structureType == STRUCTURE_TOWER)
-        {
-            structures.tower.run(Game.structures[id])
-        }
-    }
                //------Register Creep Roles------//
 
-    // for every creep name in Game.creeps
+    // for every creep in Game.creeps
     for (let name in Game.creeps) 
     {
-        // get the creep object
+        // select creep
         let creep = Game.creeps[name];  
-        screeps.run(creep);
+        // run logic
+        screepLogic.run(creep);
     }
 
                /////----- Room Logic -----//////
@@ -41,7 +29,7 @@ const structures =
         // select room
         let roomName = Game.rooms[room];
         // run logic
-        autorooms.run(roomName);
+        roomLogic.run(roomName);
     }
                    
             // --- PRINT REGULAR LOG 50 ticks --- //
@@ -51,9 +39,6 @@ const structures =
 
         console.log('Bucketed CPU: ' + Game.cpu.bucket);
         console.log('Game Tick: ' + Game.time);
-
-
-
             // if 10,000 cpu, make a pixel
             if (Game.cpu.bucket < 10000)
             {
@@ -72,7 +57,7 @@ const structures =
     // check for memory entries of died creeps by iterating over Memory.creeps
     for (let name in Memory.creeps) 
     {
-        // and checking if the creep is still alive
+        // checking if the creep is still alive
         if (Game.creeps[name] == undefined) 
         {
             // if not, delete the memory entry

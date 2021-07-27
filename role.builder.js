@@ -1,3 +1,5 @@
+const subroutine = require('creep.subroutines');
+
 var roleUpgrader = require('role.upgrader');
 
 module.exports = 
@@ -10,12 +12,8 @@ module.exports =
         if (creep.memory.target != undefined && creep.room.name != creep.memory.target 
             && creep.memory.role != 'longDistanceHarvester') 
         {
-            // find exit to target room
-            var exit = creep.room.findExitTo(creep.memory.target);
-            // move to exit
-            creep.moveTo(creep.pos.findClosestByPath(exit));
-            // return the function to not do anything else
-            return;
+            // move towards it
+            subroutine.moveToRoom(creep);
         }
 
         // if creep is trying to complete a constructionSite but has no energy left

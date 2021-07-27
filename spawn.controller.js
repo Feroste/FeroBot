@@ -4,9 +4,7 @@ module.exports =
 {
     run: function(spawn)
     {
-                // Find room
-        if (spawn != undefined)
-        {
+            // Find room
             let room = Game.rooms[spawn.room.name];
 
                         //---- Find the number of Creeps Alive ----//
@@ -121,7 +119,7 @@ module.exports =
                 
                 // If there's an attack flag, rally troops
                 // only if 8 rooms distance or less
-                else if (flag && find('attacker', flag.pos.roomName) < 1 
+                else if (flag && find('attacker', flag.pos.roomName) < 3 
                 && Game.map.getRoomLinearDistance(room.name, flag.pos.roomName) <= 8)
                 {
                     name = spawn.createAttacker(hardCap, flag.pos.roomName);
@@ -258,6 +256,5 @@ module.exports =
                 console.log(" Spawned new creep: " + name + " (" + Game.creeps[name].memory.role + ")");
                 console.log('========================================');
             }
-        }
     }
 };

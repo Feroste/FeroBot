@@ -101,4 +101,9 @@
     -- Attackers now have progressive body building and can be spawned with only 190 energy (need at least 490 available)
         with energy cap this is a 40 part 10 attack creep.
 
+    1.0.7 update Log
+    ==============================
+    -- Renamed files to maintain naming conventions
+    -- Moved turret control from game level to room level
+    -- Started the move from dedicated creep roles to subroutines to reduce redundancy
     .

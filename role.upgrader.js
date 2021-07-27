@@ -1,15 +1,16 @@
+const subroutine = require('creep.subroutines');
+
 module.exports = 
 {
     // a function to run the logic for this role
     run: function(creep) 
     {
         
-        // // if not in target room
-        if (creep.memory.target != undefined && creep.room.name != creep.memory.target) {
-            // find exit to target room
-            var exit = creep.room.findExitTo(creep.memory.target);
-            // move to exit
-            creep.moveTo(creep.pos.findClosestByRange(exit));
+        // if not in target room
+        if (creep.memory.target != undefined && creep.room.name != creep.memory.target) 
+        {
+            // move towards it
+            subroutine.moveToRoom(creep);
         }
         
         else
@@ -33,17 +34,8 @@ module.exports =
             // if creep is supposed to transfer energy to the controller
             if (creep.memory.working == true) 
             {
-                // instead of upgraderController we could also use:
-                // if (creep.transfer(creep.room.controller, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-
-                // try to upgrade the controller
-                if (creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) 
-                {
-                    // if not in range, move towards the controller
-                    creep.moveTo(creep.room.controller, {visualizePathStyle: {stroke:'red', lineStyle: 'solid', opacity: .5}});
-                }
+                subroutine.upgrade(creep);
             }
-
 
 
             // if creep is supposed to harvest energy from source
