@@ -15,7 +15,6 @@
     Flags
     -----------------
     'attackFlag' = sends a number of melee attackers to the room
-    'attack2Flag' = send a number of ranged attackers to the room
 
     [WIP] Yellow = claim
             yellow/black = reserve
@@ -106,4 +105,14 @@
     -- Renamed files to maintain naming conventions
     -- Moved turret control from game level to room level
     -- Started the move from dedicated creep roles to subroutines to reduce redundancy
+
+    1.0.8 update Log
+    ==============================
+    -- Finished adding creep subroutines
+    -- Implemented subroutines in most roles
+        now that they are done looking into a way to do away with roles mostly
+    -- Trimmed lots of dead code preparing for possible refactor
+    -- Started adding flag groups
+
+
     .

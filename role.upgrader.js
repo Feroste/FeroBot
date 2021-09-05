@@ -41,15 +41,6 @@ module.exports =
             // if creep is supposed to harvest energy from source
             else 
             {
-
-                let container = creep.pos.findClosestByPath(FIND_STRUCTURES, {
-                    filter: s => (s.structureType == STRUCTURE_STORAGE &&
-                                s.store[RESOURCE_ENERGY] > 2000)
-                                || (s.structureType == STRUCTURE_CONTAINER &&
-                                s.store[RESOURCE_ENERGY] >1000)
-                });
-
-
                 if(creep.room.terminal != undefined && creep.room.terminal.store[RESOURCE_ENERGY] > 50000)
                 {
                     if (creep.withdraw(creep.room.terminal, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE)
@@ -58,25 +49,14 @@ module.exports =
                     } 
                 }
 
-
-                else if (container != undefined)
+                else try 
                 {
-                    if (creep.withdraw(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE)
-                    {
-                        creep.moveTo(container, {visualizePathStyle: {stroke:'yellow', lineStyle: 'dashed', opacity: .5}});
-                    }
+                    subroutine.getFromStorage(creep);
                 }
-                else
+
+                catch
                 {
-                    // find closest source
-                    var source = creep.pos.findClosestByPath(FIND_SOURCES_ACTIVE);
-                    const target = creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES);
-                    // try to harvest energy, if the source is not in range
-                    if (creep.harvest(source) == ERR_NOT_IN_RANGE) 
-                    {
-                        // move towards the source
-                        creep.moveTo(source, {visualizePathStyle: {stroke:'yellow', lineStyle: 'dashed', opacity: .5}});
-                    }
+                    subroutine.harvest(creep);
                 }
             }
         }

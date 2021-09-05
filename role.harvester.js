@@ -34,31 +34,13 @@ module.exports =
             // if creep is supposed to transfer energy to the spawn or an extension
             if (creep.memory.working == true) 
             {
-                // find closest spawn or extension which is not full
-                let structure = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, 
+                // try storing
+                try
                 {
-                    // the second argument for findClosestByPath is an object which takes
-                    // a property called filter which can be a function
-                    // we use the arrow operator to define it
-                    filter: (s) => (s.structureType == STRUCTURE_SPAWN
-                                 || s.structureType == STRUCTURE_EXTENSION
-                             //    || (s.structureType == STRUCTURE_TOWER && s.energy < 310)
-                                 )
-                                 && s.energy < s.energyCapacity
-                });
-    
-                // if we found one
-                if (structure != undefined) 
-                {
-                    // try to transfer energy, if it is not in range
-                    if (creep.transfer(structure, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) 
-                    {
-                        // move towards it
-                        creep.moveTo(structure, {visualizePathStyle: {stroke:'yellow', lineStyle: 'solid', opacity: .5}});
-                    }
+                subroutine.store(creep);
                 }
-                // else upgrade
-                else 
+                // else switch hats
+                catch
                 {
                     roleChange.run(creep);
                 }
@@ -69,17 +51,7 @@ module.exports =
             // if creep is supposed to harvest energy from source
             else 
             {
-                let container = creep.pos.findClosestByPath(FIND_STRUCTURES, 
-                {
-                    filter: s => (s.structureType == STRUCTURE_STORAGE &&
-                                 s.store[RESOURCE_ENERGY] > 2000)
-                                 || (s.structureType == STRUCTURE_CONTAINER &&
-                                 s.store[RESOURCE_ENERGY] >1000)
-                });
-                let tombstones = creep.pos.findClosestByRange(FIND_TOMBSTONES);
-                let dropped = creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES);
-
-
+                
                 if(creep.room.terminal != undefined && creep.room.terminal.store[RESOURCE_ENERGY] > 50000)
                 {
                     if (creep.withdraw(creep.room.terminal, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE)
@@ -88,25 +60,13 @@ module.exports =
                     } 
                 }
     
-                else if (container != undefined)
+                else try 
                 {
-                    if (creep.withdraw(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE)
-                    {
-                        creep.moveTo(container, {visualizePathStyle: {stroke:'yellow', lineStyle: 'dashed', opacity: .5}});
-                    }
+                    subroutine.getFromStorage(creep);
                 }
-
-                else
+                catch
                 {
-                    // find closest source
-                    let source = creep.pos.findClosestByPath(FIND_SOURCES_ACTIVE);
-             
-                    if (creep.harvest(source) == ERR_NOT_IN_RANGE) 
-                    {
-                        // move towards the source
-                        creep.moveTo(source, {visualizePathStyle: {stroke:'yellow', lineStyle: 'dashed', opacity: .5}});
-                        
-                    }
+                    subroutine.harvest(creep);
                 }
             }
         }

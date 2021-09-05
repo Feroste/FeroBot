@@ -20,7 +20,7 @@ module.exports =
             
             // energy cap
             let energy = room.energyCapacityAvailable;
-            // Hard cap for spawning military
+            // Hard cap for spawning military [2000]
             let hardCap = (energy - 300)
                 if (hardCap <= 0)
                 {
@@ -30,7 +30,7 @@ module.exports =
                 {
                     hardCap = 2000;
                 }
-            // 1000 limit to keep 5 work drones
+            // energy limit for work drones
             if (room.memory.energyLimit != undefined)
             {
                 let energyLimit = room.memory.energyLimit;
@@ -38,16 +38,23 @@ module.exports =
             }
 
 
-            // attackFlag and attack2Flag
-            let flag = Game.flags.attackFlag;
-            let flag2 = Game.flags.attack2Flag;
-            let flag3 = Game.flags.explore;
+            // Flag handling
+            let flags =
+            {
+                attackFlags: room.find(FIND_FLAGS, {filter: (f) => f.color == COLOR_RED}),
+                claimFlags: room.find(FIND_FLAGS, {filter: (f) => f.color == COLOR_YELLOW}),
+                helpFlags: room.find(FIND_FLAGS, {filter: (f) => f.color == COLOR_GREEN}),
+                harvestFlags: room.find(FIND_FLAGS, {filter: (f) => f.color == COLOR_PURPLE}),
+                attackFlag: Game.flags.attackFlag,
+                exploreFlag: Game.flags.exploreFlag
+            }
+
             // creep name
             let name = undefined;
 
 
             // Multiple Spawns
-            // Check if Spawning
+            // Check if Spawning, Wait a tick
 
             let roomSpawns = room.find(FIND_MY_STRUCTURES, { filter: (s) => s.structureType == STRUCTURE_SPAWN});
                     if (spawn.spawning && roomSpawns.length > 1)
@@ -57,14 +64,16 @@ module.exports =
                     }
                     
 
-            // fall back method
+            // Fall Back Method In Case Economy is Wiped Out
             if (getCreepCount('harvester') == 0 && getCreepCount('lorry') == 0)
             {
+                // If a miner still exist, spawn a lorry
                 if (getCreepCount('miner') > 0 &&
                     (room.storage != undefined && room.energyAvailable >= 300 + 550))
                 {
                     name = spawn.createLorry(300);
                 }
+                // Otherwise spawn a harvester ASAP
                 else
                 {
                     name = spawn.createCustomCreep(room.energyAvailable, 'harvester');
@@ -119,16 +128,11 @@ module.exports =
                 
                 // If there's an attack flag, rally troops
                 // only if 8 rooms distance or less
-                else if (flag && find('attacker', flag.pos.roomName) < 3 
-                && Game.map.getRoomLinearDistance(room.name, flag.pos.roomName) <= 8)
+                else if (flags.attackFlag && find('attacker', flags.attackFlag.pos.roomName) < 3 
+                && Game.map.getRoomLinearDistance(room.name, flags.attackFlag.pos.roomName) <= 8)
                 {
-                    name = spawn.createAttacker(hardCap, flag.pos.roomName);
+                    name = spawn.createAttacker(hardCap, flags.attackFlag.pos.roomName);
                 }
-
-                // else if (flag2 && getCreepCountAll('rangedAttacker') < 2)
-                // {
-                //     name = spawn.createRangedAttacker();
-                // }
 
                 // if not enough upgraders
                 else if (getCreepCount('upgrader') < room.memory.minUpgraders) 
@@ -143,26 +147,11 @@ module.exports =
                     name = spawn.createExtractor();
                 }
                 
-
                 // if not enough longDistanceHarvesters for E17S23
                 else if (find('longDistanceHarvester', 'E17S23') < room.memory.minE17S23) 
                 {
                     // try to spawn one
                     name = spawn.createLongDistanceHarvester(energy, 1, room.name, 'E17S23', 0);
-                }
-
-                // if not enough longDistanceHarvesters for E16S22
-                else if (find('longDistanceHarvester', 'E16S22') < room.memory.minE16S22) 
-                {
-                    // try to spawn one
-                    name = spawn.createLongDistanceHarvester(energy, 1, room.name, 'E16S22', 0);
-                }
-
-                // if not enough longDistanceHarvesters for E17S21
-                else if (find('longDistanceHarvester', 'E17S21') < room.memory.minE17S21) 
-                {
-                    // try to spawn one
-                    name = spawn.createLongDistanceHarvester(energy, 1, room.name, 'E17S21', 0);
                 }
 
                 // if not enough repairers
@@ -225,7 +214,7 @@ module.exports =
             }
             
             // If there's an explore flag
-                else if (flag3 && getCreepCount('explorer') < 1)
+                else if (flags.exploreFlag && getCreepCount('explorer') < 1)
                 {
                     name = spawn.createExplorer();
                 } 

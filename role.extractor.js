@@ -1,3 +1,5 @@
+const subroutine = require('creep.subroutines');
+
 module.exports = 
 {
     // a function to run the logic for this role
@@ -21,22 +23,7 @@ module.exports =
         
         if (creep.memory.extracting) 
         {
-            var target;
-        
-            if (creep.memory.depositId) 
-            {
-                target = Game.getObjectById(creep.memory.depositId);
-            } else 
-            {
-                var targets = creep.room.find(FIND_MINERALS);
-                target = targets[0];
-                creep.memory.depositId = target.id;
-                creep.memory.mineralType = target.mineralType;
-            }
-            if (creep.harvest(target) == ERR_NOT_IN_RANGE) 
-            {
-                creep.moveTo(target);
-            }
+            subroutine.extract(creep);
         } 
         else 
         {

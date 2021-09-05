@@ -25,8 +25,7 @@ module.exports =
             }
         }
 
-
-        // Attacker [working?]
+        // Attacker
         else
         {
             // if not in target room
@@ -39,34 +38,7 @@ module.exports =
             // If in the right room
             else
             {
-                let enemyspawn = creep.room.find(FIND_HOSTILE_SPAWNS);
-                let spawnTarget = creep.pos.findClosestByPath(enemyspawn);
-                
-                let hostiles = creep.room.find(FIND_HOSTILE_CREEPS);
-                let target = creep.pos.findClosestByPath(hostiles);
-                
-                if (target != undefined)
-                {
-                        let outcome = creep.attack(target);
-                        // Out of range Move to target
-                        if (outcome == ERR_NOT_IN_RANGE) 
-                        {
-                            creep.moveTo(target);
-                        }
-                }
-                else if (spawnTarget != undefined)
-                {
-                        let outcome = creep.attack(spawnTarget);
-                        // Out of range Move to target
-                        if (outcome == ERR_NOT_IN_RANGE) 
-                        {
-                            creep.moveTo(spawnTarget);
-                        }
-                }
-                else
-                {
-                    creep.moveTo(creep.room.controller);
-                }
+                subroutine.attack(creep);
             }
         }
     }

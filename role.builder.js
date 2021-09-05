@@ -1,5 +1,4 @@
 const subroutine = require('creep.subroutines');
-
 var roleUpgrader = require('role.upgrader');
 
 module.exports = 
@@ -34,56 +33,26 @@ module.exports =
         // if creep is supposed to complete a constructionSite
         if (creep.memory.working == true) 
         {
-            // find closest constructionSite
-            var constructionSite = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES);
-            // if one is found
-            if (constructionSite != undefined) 
+            try
             {
-                // try to build, if the constructionSite is not in range
-                if (creep.build(constructionSite) == ERR_NOT_IN_RANGE) 
-                {
-                    // move towards the constructionSite
-                    creep.moveTo(constructionSite, {visualizePathStyle: {stroke:'green', lineStyle: 'solid', opacity: .5}});
-                }
+            subroutine.build(creep);
             }
-            // if no constructionSite is found
-            else 
+            catch
             {
-                // go upgrading the controller
                 roleUpgrader.run(creep);
             }
         }
+
         // if creep is supposed to get energy
         else 
         {
-            // find closest container
-            let container = creep.pos.findClosestByPath(FIND_STRUCTURES, 
+            try 
             {
-                filter: s => (s.structureType == STRUCTURE_STORAGE &&
-                             s.store[RESOURCE_ENERGY] > 2000)
-                             || (s.structureType == STRUCTURE_CONTAINER &&
-                             s.store[RESOURCE_ENERGY] >1000)
-            });
-            // if one was found
-            if (container != undefined) 
-            {
-                // try to withdraw energy, if the container is not in range
-                if (creep.withdraw(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) 
-                {
-                    // move towards it
-                    creep.moveTo(container, {visualizePathStyle: {stroke:'yellow', lineStyle: 'dashed', opacity: .5}});
-                }
+                subroutine.getFromStorage(creep);
             }
-            else 
+            catch
             {
-                // find closest source
-                var source = creep.pos.findClosestByPath(FIND_SOURCES_ACTIVE);
-                // try to harvest energy, if the source is not in range
-                if (creep.harvest(source) == ERR_NOT_IN_RANGE) 
-                {
-                    // move towards it
-                    creep.moveTo(source, {visualizePathStyle: {stroke:'yellow', lineStyle: 'dashed', opacity: .5}});
-                }
+                subroutine.harvest(creep);
             }
         }
     }

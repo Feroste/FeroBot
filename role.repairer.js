@@ -1,3 +1,4 @@
+var subroutine = require('creep.subroutines');
 var roleBuilder = require('role.builder');
 
 module.exports = 
@@ -23,65 +24,28 @@ module.exports =
         // if creep is supposed to repair something
         if (creep.memory.working == true) 
         {
-            // find closest structure with less than max hits
-            // Exclude walls because they have too many max hits
-            var structure = creep.pos.findClosestByPath(FIND_STRUCTURES, 
+            try
             {
-                filter: (s) => s.hits < s.hitsMax && s.structureType != STRUCTURE_WALL
-                        && s.structureType != STRUCTURE_RAMPART
-            });
-
-            // if we find one
-            if (structure != undefined) 
-            {
-                // try to repair it, if it is out of range
-                if (creep.repair(structure) == ERR_NOT_IN_RANGE) 
-                {
-                    // move towards it
-                    creep.moveTo(structure);
-                }
+                subroutine.repair(creep);
             }
-            // if we can't fine one
-            else 
+            // if we can't
+            catch
             {
                 // look for construction sites
                 roleBuilder.run(creep);
             }
         }
         
-        
-        
-        
-        
         // if creep is supposed to harvest energy from source
         else 
         {
-            let container = creep.pos.findClosestByPath(FIND_STRUCTURES, 
+            try 
             {
-                filter: s => (s.structureType == STRUCTURE_STORAGE &&
-                             s.store[RESOURCE_ENERGY] > 2000)
-                             || (s.structureType == STRUCTURE_CONTAINER &&
-                             s.store[RESOURCE_ENERGY] >1000)
-            });
-
-            if (container != undefined)
-            {
-                if (creep.withdraw(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE)
-                {
-                    creep.moveTo(container);
-                }
+                subroutine.getFromStorage(creep);
             }
-            else
+            catch
             {
-                // find closest source
-                var source = creep.pos.findClosestByPath(FIND_SOURCES_ACTIVE);
-                const target = creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES);
-                // try to harvest energy, if the source is not in range
-                if (creep.harvest(source) == ERR_NOT_IN_RANGE) 
-                {
-                    // move towards the source
-                    creep.moveTo(source);
-                }
+                subroutine.harvest(creep);
             }
         }
     }

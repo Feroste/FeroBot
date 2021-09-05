@@ -61,50 +61,50 @@ module.exports = function()
         
         // CLAIMER
         StructureSpawn.prototype.createClaimer =
-            function (target, order) 
+        function (target, order) 
+        {
+            if (order == 1)
             {
-                if (order == 1)
-                {
-                    return this.createCreep([MOVE,CLAIM],undefined, 
-                                            {role: 'claimer', target: target, order: order});
-                }
-                if (order == -1)
-                {
-                    return this.createCreep([MOVE,CLAIM,MOVE,CLAIM], undefined,
-                                            {role: 'claimer', target: target, order: order});
-                }
-            };
+                return this.createCreep([MOVE,CLAIM],undefined, 
+                                        {role: 'claimer', target: target, order: order});
+            }
+            if (order == -1)
+            {
+                return this.createCreep([MOVE,CLAIM,MOVE,CLAIM], undefined,
+                                        {role: 'claimer', target: target, order: order});
+            }
+        };
             
         // ATTACKER
         StructureSpawn.prototype.createAttacker =
-            function (energy, target)
+        function (energy, target)
+        {
+            // create a body with the specified number of ATTACK parts and one MOVE part per non-MOVE part
+            var body = [];
+
+                
+            // 190 = 80 (cost of ATTACK) + 10 (cost of TOUGH) + 100 (cost of MOVE x2)
+            let numberOfParts = Math.floor(energy/ 190);
+
+            for (let i = 0; i < numberOfParts; i++) 
             {
-                // create a body with the specified number of ATTACK parts and one MOVE part per non-MOVE part
-                var body = [];
+                body.push(TOUGH);
+                body.push(MOVE);
+            }
 
-                    
-                // 190 = 80 (cost of ATTACK) + 10 (cost of TOUGH) + 100 (cost of MOVE x2)
-                let numberOfParts = Math.floor(energy/ 190);
+            for (let i = 0; i < numberOfParts; i++) 
+            {
+                body.push(ATTACK);
+                body.push(MOVE);
+            }
 
-                for (let i = 0; i < numberOfParts; i++) 
-                {
-                    body.push(TOUGH);
-                    body.push(MOVE);
-                }
-
-                for (let i = 0; i < numberOfParts; i++) 
-                {
-                    body.push(ATTACK);
-                    body.push(MOVE);
-                }
-    
-                // create creep with the created body
-                return this.createCreep(body, undefined, 
-                {
-                    role: 'attacker',
-                    target: target,
-                });
-            };
+            // create creep with the created body
+            return this.createCreep(body, undefined, 
+            {
+                role: 'attacker',
+                target: target,
+            });
+        };
 
         // RANGED ATTACKER
         StructureSpawn.prototype.createRangedAttacker =
@@ -172,9 +172,7 @@ module.exports = function()
                                     {role: 'explorer', target: target});
         };
         
-
-        // LORRY
-            
+        // LORRY  
         StructureSpawn.prototype.createLorry =
         function (energy) 
         {
