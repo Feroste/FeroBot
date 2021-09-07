@@ -21,7 +21,7 @@
                                         Features
     - Automatic start
     - Range of basic creep subroutines
-    - FSM of role orientated creeps
+    - Role orientated creeps
     - Progressive body building
     - DEFCON system
     - Easy Claim
