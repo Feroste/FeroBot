@@ -74,18 +74,5 @@ module.exports =
                 roles.claimer.run(creep);
                 break;
         }
-
-        // if (creep.memory.initialized == null)
-        // {
-        //     creep.memory.initialized = 1;
-        //     creep.memory.
-        // }
-
-
-
-
-
-
-
     }
 };

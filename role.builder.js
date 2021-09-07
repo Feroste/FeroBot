@@ -15,27 +15,15 @@ module.exports =
             subroutine.moveToRoom(creep);
         }
 
-        // if creep is trying to complete a constructionSite but has no energy left
-        if (creep.memory.working == true && creep.carry.energy == 0) 
-        {
-            // switch state
-            creep.memory.working = false;
-            creep.say('Collecting');
-        }
-        // if creep is harvesting energy but is full
-        else if (creep.memory.working == false && creep.carry.energy == creep.carryCapacity) 
-        {
-            // switch state
-            creep.memory.working = true;
-            creep.say('Building');
-        }
+        // Check to see if the creep should switch states
+        subroutine.checkWorking(creep);
 
         // if creep is supposed to complete a constructionSite
         if (creep.memory.working == true) 
         {
             try
             {
-            subroutine.build(creep);
+                subroutine.build(creep);
             }
             catch
             {

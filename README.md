@@ -3,6 +3,8 @@
     Make sure to add your room to memory watch paths so you can edit creep numbers, energy limit, etc
         ex. rooms.N11E22
 
+    'attackFlag' = sends a number of melee attackers to the room
+
     Claim a room
         ex.   Game.rooms.ROOMNAME.memory.claimRoom = 'W12N21'
         ex.   Game.rooms.ROOMNAME.memory.reserveRoom0 = 'W21N12'
@@ -12,23 +14,29 @@
     Manual Creep
     Game.spawns.Spawn1.createCreep([WORK,WORK,CARRY,CARRY,MOVE,MOVE,WORK,WORK,CARRY,CARRY,MOVE,MOVE], undefined, {target: 'E14S22', role: 'harvester', working: false})
 
-    Flags
-    -----------------
-    'attackFlag' = sends a number of melee attackers to the room
 
-    [WIP] Yellow = claim
-            yellow/black = reserve
-    [WIP] Red = attack
-            red/blue = ranged attack
-    [WIP] Green = send workers to this room
-    [WIP] Purple = long distance harvest (place on source)
+    ================================================================================
+    --------------------------------------------------------------------------------
+    ================================================================================
+                                        Features
+    - Automatic start
+    - Range of basic creep subroutines
+    - FSM of role orientated creeps
+    - Progressive body building
+    - DEFCON system
+    - Easy Claim
+    - Light Economy
+    - Path visuals
+    ================================================================================
+    --------------------------------------------------------------------------------
+    ================================================================================
 
-    
+
     To-Do
     ==============================
     -more progressive body building
     -find closest room with enough energy for remote spawns [needs implementation]
-    -search by flag color/ name wildcards
+    -search by flag color/ name wildcards (flags dont have memory addresses)
     -properly iterate over long distance harvesters so they aren't hard coded
     -long distance mining overhaul
         -miner/harvester
@@ -38,15 +46,14 @@
     
     
     - Combat AI [|||--]
-    - DEFCON system [|||--]
+    - DEFCON system [||||-]
     - Lab Functionality [|----]
     - Factory functionality [-----]
-    - Pickup dropped energy [-----]
+    - Pickup dropped energy [|----]
     - Whitelist / Traitor code [-----]
-    - Full Claim room functionality [|||--]
     - Fallback methods for resource management [||||-]
 
-    - Empire [||--------]
+    - Empire [|||-------]
 
 
 
@@ -114,5 +121,10 @@
     -- Trimmed lots of dead code preparing for possible refactor
     -- Started adding flag groups
 
+    1.0.9 update Log
+    ==============================
+    -- Optimized wall Repair function and moved it into subroutines
+    -- Moved primary creep work state check into a subroutine
+    -- Optimized DEFCON function
 
     .

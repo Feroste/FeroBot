@@ -10,7 +10,7 @@ module.exports =
             {
                 if(structure.structureType == STRUCTURE_WALL || structure.structureType == STRUCTURE_RAMPART)
                 {
-                    return (structure.hits < 100000)
+                    return (structure.hits < 10000)
                 }
                 else
                 {
@@ -20,7 +20,7 @@ module.exports =
         })
         
         
-        if(closestHostile && tower.room != 'W38N57') 
+        if(closestHostile) 
         {
             tower.attack(closestHostile);
         }

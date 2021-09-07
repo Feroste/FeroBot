@@ -1,17 +1,18 @@
 // * indicates error handling is available
 module.exports =
 {
-    // Will harvest from source
+    // Will harvest from source*
     harvest: function(creep)
     {
         // find closest source
         let source = creep.pos.findClosestByPath(FIND_SOURCES_ACTIVE);
         // Try to harvest source
+        if (source == undefined)
+        {throw 'No source available';}
         if (creep.harvest(source) == ERR_NOT_IN_RANGE) 
         {
             // if not in range, move towards the source
-            creep.moveTo(source, {visualizePathStyle: {stroke:'yellow', lineStyle: 'dashed', opacity: .5}});
-            
+            creep.moveTo(source, {visualizePathStyle: {stroke:'yellow', lineStyle: 'dashed', opacity: .5}});    
         }
     },
 
@@ -21,9 +22,6 @@ module.exports =
         // find closest spawn or extension which is not full
         let structure = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, 
             {
-                // the second argument for findClosestByPath is an object which takes
-                // a property called filter which can be a function
-                // we use the arrow operator to define it
                 filter: (s) => (s.structureType == STRUCTURE_SPAWN
                                 || s.structureType == STRUCTURE_EXTENSION
                             //    || (s.structureType == STRUCTURE_TOWER && s.energy < 310)
@@ -114,9 +112,11 @@ module.exports =
         {throw 'No construction sites';}
     },
 
-    // Will put energy into the room controller
+    // Will put energy into the room controller*
     upgrade: function(creep)
     {
+        if (creep.room.controller == undefined)
+        {throw 'Hallway error';}
         // try to upgrade the controller
         if (creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) 
         {
@@ -148,6 +148,32 @@ module.exports =
                 }
                 else
                 {throw 'No damaged structures';}
+    },
+
+    // Will find the weakest wall and repair it*
+    wallRepair: function(creep)
+    {
+        // find all walls in the room
+        var walls = creep.room.find(FIND_STRUCTURES, 
+        {
+            filter: (s) => s.structureType == STRUCTURE_WALL
+        });
+
+        if (walls == undefined)
+        {throw 'No walls found';}
+        // Find weakest wall
+        var target = _.min(walls, w=> w.hits)
+
+        // if we find a wall that has to be repaired
+        if (target != undefined) 
+        {
+            // try to repair it, if not in range
+            if (creep.repair(target) == ERR_NOT_IN_RANGE) 
+            {
+                // move towards it
+                creep.moveTo(target, {visualizePathStyle: {stroke:'grey', lineStyle: 'solid', opacity: .5}});
+            }
+        }
     },
 
     // Will attack enemy creeps and then enemy spawns [simple]
@@ -242,12 +268,36 @@ module.exports =
         }
     },
 
-    // Will move to whatever room is designated in creep.memory.target
+    // Will move to whatever room is designated in creep.memory.target*
     moveToRoom: function(creep)
     {
+        if (creep.memory.target == undefined)
+        {throw 'No target room defined';}
         // find exit to target room
         var exit = creep.room.findExitTo(creep.memory.target);
         // move to exit
         creep.moveTo(creep.pos.findClosestByPath(exit));
+    },
+
+    // Check to see how much energy creep has, if the creep should switch working states
+    checkWorking: function(creep)
+    {
+        // Default working is false
+        if (creep.memory.working == undefined)
+        {
+            creep.memory.working = false;
+        }
+        // if creep is using energy but has no energy left
+        if (creep.memory.working == true && creep.carry.energy == 0) 
+        {
+            // switch state
+            creep.memory.working = false;
+        }
+        // if creep is getting energy but is full
+        else if (creep.memory.working == false && creep.carry.energy == creep.carryCapacity) 
+        {
+            // switch state
+            creep.memory.working = true;
+        }
     }
 }

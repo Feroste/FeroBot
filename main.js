@@ -51,17 +51,17 @@ const roomLogic = require('room.controller');
                Game.cpu.generatePixel();
             }
         console.log('// --- End   Report --- //')
-    }
 
-            // CLEAR DEAD CREEPS FROM MEMORY
-    // check for memory entries of died creeps by iterating over Memory.creeps
-    for (let name in Memory.creeps) 
-    {
-        // checking if the creep is still alive
-        if (Game.creeps[name] == undefined) 
+            // ALSO CLEAR DEAD CREEPS FROM MEMORY
+        // check for memory entries of died creeps by iterating over Memory.creeps
+        for (let name in Memory.creeps) 
         {
-            // if not, delete the memory entry
-            delete Memory.creeps[name];
+            // checking if the creep is still alive
+            if (Game.creeps[name] == undefined) 
+            {
+                // if not, delete the memory entry
+                delete Memory.creeps[name];
+            }
         }
     }
 };

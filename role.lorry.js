@@ -1,24 +1,12 @@
-var roleChange = require('role.builder')
+const subroutine = require('creep.subroutines')
 
 module.exports = 
 {
     // a function to run the logic for this role
     run: function(creep) 
     {
-        // if creep is bringing energy to a structure but has no energy left
-        if (creep.memory.working == true && creep.carry.energy == 0) 
-        {
-            // switch state
-            creep.memory.working = false;
-            creep.say('Collecting');
-        }
-        // if creep is harvesting energy but is full
-        else if (creep.memory.working == false && creep.carry.energy == creep.carryCapacity) 
-        {
-            // switch state
-            creep.memory.working = true;
-            creep.say('Hauling');
-        }
+        // Check to see if the creep should switch states
+        subroutine.checkWorking(creep);
 
         // if creep is supposed to transfer energy to a structure
         if (creep.memory.working == true) 
@@ -58,10 +46,7 @@ module.exports =
             
             else
             {
-                
-                // LORRIES DONT HAVE ANY WORK PARTS
-                // roleChange.run(creep);
-                
+
                 
             }
         }

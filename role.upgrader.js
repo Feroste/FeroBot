@@ -16,20 +16,8 @@ module.exports =
         else
         {
             
-            // if creep is bringing energy to the controller but has no energy left
-            if (creep.memory.working == true && creep.carry.energy == 0) 
-            {
-                // switch state
-                creep.memory.working = false;
-                creep.say('Collecting');
-            }
-            // if creep is harvesting energy but is full
-            else if (creep.memory.working == false && creep.carry.energy == creep.carryCapacity) 
-            {
-                // switch state
-                creep.memory.working = true;
-                creep.say('Upgrading');
-            }
+            // Check to see if the creep should switch states
+            subroutine.checkWorking(creep);
 
             // if creep is supposed to transfer energy to the controller
             if (creep.memory.working == true) 

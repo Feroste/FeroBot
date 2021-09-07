@@ -15,21 +15,8 @@ module.exports =
         
         else
         {
-            
-            // if creep is bringing energy to the spawn or an extension but has no energy left
-            if (creep.memory.working == true && creep.carry.energy == 0) 
-            {
-                // switch state
-                creep.memory.working = false;
-                creep.say('Collecting');
-            }
-            // if creep is harvesting energy but is full
-            else if (creep.memory.working == false && creep.carry.energy == creep.carryCapacity) 
-            {
-                // switch state
-                creep.memory.working = true;
-                creep.say('Working');
-            }
+            // Check to see if the creep should switch states
+            subroutine.checkWorking(creep);
     
             // if creep is supposed to transfer energy to the spawn or an extension
             if (creep.memory.working == true) 
@@ -37,7 +24,7 @@ module.exports =
                 // try storing
                 try
                 {
-                subroutine.store(creep);
+                    subroutine.store(creep);
                 }
                 // else switch hats
                 catch
@@ -45,8 +32,6 @@ module.exports =
                     roleChange.run(creep);
                 }
             }
-    
-    
     
             // if creep is supposed to harvest energy from source
             else 

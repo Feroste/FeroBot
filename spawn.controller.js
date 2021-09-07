@@ -1,4 +1,4 @@
-require('prototype.spawn')();
+require('spawn.prototype')();
 
 module.exports = 
 {
@@ -41,12 +41,11 @@ module.exports =
             // Flag handling
             let flags =
             {
-                attackFlags: room.find(FIND_FLAGS, {filter: (f) => f.color == COLOR_RED}),
-                claimFlags: room.find(FIND_FLAGS, {filter: (f) => f.color == COLOR_YELLOW}),
-                helpFlags: room.find(FIND_FLAGS, {filter: (f) => f.color == COLOR_GREEN}),
-                harvestFlags: room.find(FIND_FLAGS, {filter: (f) => f.color == COLOR_PURPLE}),
-                attackFlag: Game.flags.attackFlag,
-                exploreFlag: Game.flags.exploreFlag
+                // attackFlags: _.filter(Game.flags, f => f.color === COLOR_RED),
+                // claimFlags: _.find(Game.flags, {filter: (f) => f.color == COLOR_YELLOW}),
+                // helpFlags: _.find(Game.flags, {filter: (f) => f.color == COLOR_GREEN}),
+                // harvestFlags: _.find(Game.flags, {filter: (f) => f.color == COLOR_PURPLE}),
+                attackFlag: Game.flags.attackFlag
             }
 
             // creep name
@@ -160,20 +159,6 @@ module.exports =
                     // try to spawn one
                     name = spawn.createCustomCreep(energy, 'repairer');
                 }
-
-                //  if there is a labor order defined
-                else if (room.memory.labor != undefined) 
-                {
-                    //  try to spawn a laborer
-                    name = spawn.createLaborer(room.memory.labor);
-                        
-                    //   if that worked
-                    if (!(name < 0)) 
-                    {
-                    //  delete the labor order
-                        delete room.memory.labor;
-                    }
-                }
                 
                 // if not enough builders
                 else if (getCreepCount('builder') < room.memory.minBuilders) 
@@ -212,12 +197,6 @@ module.exports =
                     name = spawn.createClaimer(room.memory.reserveRoom0, -1);
                 }
             }
-            
-            // If there's an explore flag
-                else if (flags.exploreFlag && getCreepCount('explorer') < 1)
-                {
-                    name = spawn.createExplorer();
-                } 
                 
                 else
                 {
