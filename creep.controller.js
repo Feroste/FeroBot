@@ -1,27 +1,9 @@
+const roles = require('creep.roles');
 const subroutine = require('creep.subroutines');
-const roles = 
-{
-    // Main Roles
-    harvester: require('role.harvester'),
-    upgrader: require('role.upgrader'),
-    builder: require('role.builder'),
-    repairer: require('role.repairer'),
-    
-    // Support Roles
-    miner: require('role.miner'),
-    extractor: require('role.extractor'),
-    lorry: require('role.lorry'),
-    wallRepairer: require('role.wallRepairer'),
-    longDistanceHarvester: require('role.longDistanceHarvester'),
-
-    // Niche Roles
-    attacker: require('role.attacker'),
-    claimer: require('role.claimer')
-}
-
 
 module.exports = 
 {
+    // Run creep roles
     run: function(creep)
     {
         switch(creep.memory.role)
@@ -31,47 +13,47 @@ module.exports =
                 creep.memory.working = false
                 break;
             case 'harvester':
-                roles.harvester.run(creep);
+                roles.harvester(creep);
                 break;
 
             case 'upgrader':
-                roles.upgrader.run(creep)
+                roles.upgrader(creep)
                 break;
 
             case 'builder':
-                roles.builder.run(creep);
+                roles.builder(creep);
                 break;
                 
             case 'repairer':
-                roles.repairer.run(creep);
+                roles.repairer(creep);
                 break;
                 
             case 'wallRepairer':
-                roles.wallRepairer.run(creep);
+                roles.wallRepairer(creep);
                 break;
                 
             case 'longDistanceHarvester':
-                roles.longDistanceHarvester.run(creep);
+                roles.longDistanceHarvester(creep);
                 break;
                 
             case 'attacker':
-                roles.attacker.run(creep);
+                roles.attacker(creep);
                 break;
                 
             case 'miner':
-                roles.miner.run(creep);
+                roles.miner(creep);
                 break;
                 
             case 'extractor':
-                roles.extractor.run(creep);
+                roles.extractor(creep);
                 break;
                 
             case 'lorry':
-                roles.lorry.run(creep);
+                roles.lorry(creep);
                 break;
                 
             case 'claimer':
-                roles.claimer.run(creep);
+                roles.claimer(creep);
                 break;
         }
     }

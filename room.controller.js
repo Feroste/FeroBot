@@ -26,6 +26,15 @@ module.exports =
             room.memory.defenders = 0;
         }
 
+        // Flag handling
+        let flags =
+        {
+            attackFlags: _.filter(Game.flags, f => f.color === COLOR_RED),
+            claimFlags: _.find(Game.flags, {filter: (f) => f.color == COLOR_YELLOW}),
+            helpFlags: _.find(Game.flags, {filter: (f) => f.color == COLOR_GREEN}),
+            harvestFlags: _.find(Game.flags, {filter: (f) => f.color == COLOR_PURPLE})
+        }
+
         //////////---Spawn Logic---//////////
 
             // Find Spawns

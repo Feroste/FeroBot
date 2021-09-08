@@ -41,10 +41,6 @@ module.exports =
             // Flag handling
             let flags =
             {
-                // attackFlags: _.filter(Game.flags, f => f.color === COLOR_RED),
-                // claimFlags: _.find(Game.flags, {filter: (f) => f.color == COLOR_YELLOW}),
-                // helpFlags: _.find(Game.flags, {filter: (f) => f.color == COLOR_GREEN}),
-                // harvestFlags: _.find(Game.flags, {filter: (f) => f.color == COLOR_PURPLE}),
                 attackFlag: Game.flags.attackFlag
             }
 
