@@ -102,4 +102,11 @@
         and assigns creeps individual work orders
     -- Brainstorming a new spawn control system to work with job requests
 
+    1.1.1 update Log
+    ==============================
+    -- Started new spawn function
+    -- Most subroutines have error handles and can take args now
+    -- fixed a lot of JS equalities to strict for free CPU dust
+    -- fixed some of my bad indentation
+
 .

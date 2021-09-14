@@ -37,13 +37,13 @@ const roomLogic = require('room.controller');
     {
         console.log('// --- Status Report --- //');
 
-        console.log('Bucketed CPU: ' + Game.cpu.bucket);
-        console.log('Game Tick: ' + Game.time);
+        console.log(`Bucketed CPU: ${Game.cpu.bucket}`);
+        console.log(`Game Tick: ${Game.time}`);
             // if 10,000 cpu, make a pixel
             if (Game.cpu.bucket < 10000)
             {
                 let pixelpercent = Math.floor((Game.cpu.bucket/ 10000) * 100);
-                console.log('Pixel Progress: ' + pixelpercent + '%');
+                console.log(`Pixel Progress: ${pixelpercent}%`);
             }
             else
             {
@@ -57,7 +57,7 @@ const roomLogic = require('room.controller');
         for (let name in Memory.creeps) 
         {
             // checking if the creep is still alive
-            if (Game.creeps[name] == undefined) 
+            if (Game.creeps[name] === undefined) 
             {
                 // if not, delete the memory entry
                 delete Memory.creeps[name];

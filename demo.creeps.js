@@ -1,42 +1,11 @@
 const subroutine = require('creep.subroutines');
+const roles = require('creep.roles');
 
 exports.module =
 {
     // Experimental Task handler
     demo: function(creep)
     {
-                // CREEP CONTROLLER
-        // Check to see if creep should be working
-        var working = jobManager.working(creep);
-        
-        // If we have energy
-        if(working)
-        {
-            // Do our job
-            if(creep.memory.job)
-            {
-                jobManager.run(creep);
-            }
-
-            // Don't have a job, look for one
-            else
-            {
-                jobManager.search(creep);
-            }
-        }
-
-        // If we don't have energy
-        else if(!working)
-        {
-            jobManager.energy(creep);
-        }
-
-        // If we aren't an eco creep
-        else
-        {
-            creep.say('End of the line');
-        }
-
 
     /*
         VERY WIP
@@ -102,35 +71,79 @@ exports.module =
         // JOB MANAGER
         jobManager =
         {
-            job: function(id,room,type,arg) 
+
+
+
+
+            // Code starts here
+
+
+
+            // This module should be ran for every creep
+            run: function(creep)
             {
-                this.id = id;
+                try
+                {
+                    // Check to see if creep should be working
+                    var working = subroutine.working(creep);
+                    
+                    // If not an eco creep
+                    if(working === undefined)
+                    {
+                        
+                    }
+                    
+                    // If we don't have energy
+                    if(!working)
+                    {
+                        this.energy(creep);
+                    }
+
+                    // Don't have a job, look for one
+                    if(!creep.memory.job)
+                    {
+                        this.search(creep);
+                    }
+
+                    // Do our job
+                    subroutine.run(creep);
+                }
+
+                catch
+                {
+                    // Wander
+                    subroutine.wander(creep);
+                    creep.say('REACHED END OF JOB MANAGER');
+                }
+            },
+            
+            // Job template
+            job: function(room,type,arg) 
+            {
+                //this.id = idGenerator.next();
                 this.room = room
                 this.type = type;
                 this.status = 'unfinished';
                 this.arg = arg;
-                this.priority = 0;
+                //this.priority = 0;
             },
-
-            // Shortcuts
-            run: function(creep)
-            {subroutine.run(creep);},
-            working: function(creep)
-            {subroutine.checkWorking(creep);},
-
 
             // Search for available jobs
             search: function(creep)
             {
                 // Find Jobs
 
+                // Create jobs array
                 jobs = [];
-                jobs.push(jobManager.job(type,arg));
+                // Push job to array
+                jobs.push(jobManager.job(room,type,arg));
+                
+                
                 // Check if creep can do job
 
+                // Spread jobs
+                allJobs = [...jobs];
 
-                
-                
                 // Give job to creep
                 creep.memory.job = job;
                 // Run job
@@ -149,7 +162,7 @@ exports.module =
                     // no job if a miner is present
                     // Decide jobs based on available spaces
 
-            },
+            }
         }
     }
 }

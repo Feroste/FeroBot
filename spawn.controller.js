@@ -31,7 +31,7 @@ module.exports =
                     hardCap = 2000;
                 }
             // energy limit for work drones
-            if (room.memory.energyLimit != undefined)
+            if (room.memory.energyLimit !== undefined)
             {
                 let energyLimit = room.memory.energyLimit;
                 if (energy > energyLimit) {energy = energyLimit;}
@@ -104,7 +104,7 @@ module.exports =
                 name = spawn.createAttacker(hardCap, -1);
             }
 
-            if (name == undefined)
+            if (name === undefined)
             {
                 // if not enough harvesters
                 if (getCreepCount('harvester') < room.memory.minHarvesters) 
@@ -172,7 +172,7 @@ module.exports =
                 
                 
                 //  if there is a claim order defined
-            else if (room.memory.claimRoom != undefined) 
+            else if (room.memory.claimRoom !== undefined) 
             {
                 //  try to spawn a claimer
                 name = spawn.createClaimer(room.memory.claimRoom, 1);
@@ -186,7 +186,7 @@ module.exports =
             }
 
             // If we need reservers
-            else if (room.memory.reserveRoom0 != undefined)
+            else if (room.memory.reserveRoom0 !== undefined)
             {
                 if (find('claimer', room.memory.reserveRoom0) < 1)
                 {
@@ -204,20 +204,20 @@ module.exports =
             if (!(name < 0)) 
             {
                 console.log('========================================');
-                console.log('Log Results for : ' + room.name);
+                console.log(`Log Results for : ${room.name}`);
                 console.log('-----------------------');
-                console.log("Energy Cap = " + energy);
-                console.log("Harvesters     : " + getCreepCount('harvester'));
-                console.log("Upgraders      : " + getCreepCount('upgrader'));
-                console.log("Builders       : " + getCreepCount('builder'));
-                console.log("Repairers      : " + getCreepCount('repairer'));
-                console.log("Wall Repairers : " + getCreepCount('wallRepairer'));
+                console.log(`Energy Cap = ${energy}`);
+                console.log(`Harvesters     : ${getCreepCount('harvester')}`);
+                console.log(`Upgraders      : ${getCreepCount('upgrader')}`);
+                console.log(`Builders       : ${getCreepCount('builder')}`);
+                console.log(`Repairers      : ${getCreepCount('repairer')}`);
+                console.log(`Wall Repairers : ${getCreepCount('wallRepairer')}`);
                 if (getCreepCount('miner') > 0)
                 {
-                console.log("Lorries     : " + getCreepCount('lorry'));
+                console.log(`Lorries     : ${getCreepCount('lorry')}`);
                 }
                 console.log('-----------------------');
-                console.log(" Spawned new creep: " + name + " (" + Game.creeps[name].memory.role + ")");
+                console.log(` Spawned new creep: ${name} (${Game.creeps[name].memory.role})`);
                 console.log('========================================');
             }
     }
