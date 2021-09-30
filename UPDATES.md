@@ -4,7 +4,7 @@
     ==============================
     -more progressive body building
     -find closest room with enough energy for remote spawns [needs implementation]
-    -search by flag color/ name wildcards (flags dont have memory addresses)
+    -search by flag color/ name wildcards (flags dont have memory addresses try flag.pos.roomName)
     -properly iterate over long distance harvesters so they aren't hard coded
     -long distance mining overhaul
         -miner/harvester
@@ -108,5 +108,13 @@
     -- Most subroutines have error handles and can take args now
     -- fixed a lot of JS equalities to strict for free CPU dust
     -- fixed some of my bad indentation
+
+    1.1.2 update Log
+    ==============================
+    -- Added a check to clear old rooms from memory
+    -- Reoptimized DEFCON function
+    -- Fixed extractor role to better understand behavior for job manager
+    -- Added ID generator
+    -- Added part Checker
 
 .
