@@ -444,17 +444,17 @@ module.exports =
                             && s.energy < s.energyCapacity
             });
 
-            if (structure === undefined && creep.room.terminal !== undefined && creep.room.terminal.store[RESOURCE_ENERGY] < 20000)
+            if (structure == undefined && creep.room.terminal != undefined && creep.room.terminal.store[RESOURCE_ENERGY] < 20000)
             {
                 structure = creep.room.terminal;
             }
-            else if (structure === undefined && creep.room.storage !== undefined && creep.room.storage.store[RESOURCE_ENERGY] < 750000) 
+            else if (structure == undefined && creep.room.storage != undefined && creep.room.storage.store[RESOURCE_ENERGY] < 750000) 
             {
                 structure = creep.room.storage;
             }
 
             // if we found one
-            if (structure !== undefined) 
+            if (structure != undefined) 
             {
                 // try to transfer energy, if it is not in range
                 if (creep.transfer(structure, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) 
@@ -473,13 +473,13 @@ module.exports =
                 filter: s => s.structureType === STRUCTURE_CONTAINER && s.store[RESOURCE_ENERGY] > 300
             });
 
-            if (container === undefined) 
+            if (container == undefined) 
             {
                 container = creep.room.storage;
             }
 
             // if one was found
-            if (container !== undefined) 
+            if (container != undefined) 
             {
                 // try to withdraw energy, if the container is not in range
                 if (creep.withdraw(container, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) 

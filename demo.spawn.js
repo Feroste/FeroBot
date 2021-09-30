@@ -37,6 +37,7 @@ module.exports =
         // Decide based on job creep was spawned for
         switch(job.type)
         {
+            // Eco creeps
             case 'harvest'||'upgrade'||'build':
                 // create a balanced body as big as possible with the given energy
                 var numberOfParts = Math.floor(energy / 200);
@@ -56,6 +57,4 @@ module.exports =
                 return body;
         }
     },
-
-
 }

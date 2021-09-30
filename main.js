@@ -63,5 +63,14 @@ const roomLogic = require('room.controller');
                 delete Memory.creeps[name];
             }
         }
+
+            // Clear old rooms
+        for (let room in Memory.rooms)
+        {
+            if (Game.rooms[room] === undefined)
+            {
+                delete Memory.rooms[room];
+            }
+        }
     }
 };

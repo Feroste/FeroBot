@@ -87,22 +87,16 @@ exports.module =
                     // Check to see if creep should be working
                     var working = subroutine.working(creep);
                     
-                    // If not an eco creep
-                    if(working === undefined)
+                    // Don't have a job, look for one
+                    if(!creep.memory.job)
                     {
-                        
+                        this.search(creep);
                     }
                     
                     // If we don't have energy
                     if(!working)
                     {
                         this.energy(creep);
-                    }
-
-                    // Don't have a job, look for one
-                    if(!creep.memory.job)
-                    {
-                        this.search(creep);
                     }
 
                     // Do our job
@@ -117,51 +111,111 @@ exports.module =
                 }
             },
             
+
+
+
+
+
+
+
+
             // Job template
             job: function(room,type,arg) 
             {
-                //this.id = idGenerator.next();
+                this.id = `${subroutine.idGenerator()} ${subroutine.idGenerator()}`;
                 this.room = room
                 this.type = type;
                 this.status = 'unfinished';
                 this.arg = arg;
-                //this.priority = 0;
+                this.priority = 0;
             },
 
+
+
+            
             // Search for available jobs
             search: function(creep)
             {
                 // Find Jobs
 
-                // Create jobs array
-                jobs = [];
-                // Push job to array
-                jobs.push(jobManager.job(room,type,arg));
-                
-                
-                // Check if creep can do job
-
                 // Spread jobs
                 allJobs = [...jobs];
 
+                // Check if creep can do job
+                
                 // Give job to creep
                 creep.memory.job = job;
                 // Run job
-                jobManager.run(creep);
+                subroutine.run(creep);
             },
+
+
+
+
+
+
+            // Should only run every X ticks
+            createJobs: function(room)
+            {
+                if(room.memory.sources === undefined)
+                {
+                    // Find sources in room
+
+                    // Find free spaces around each source
+                }
+
+                jobs = []
+
+                //  spawns extensions towers containers storage terminal
+
+                //  upgrade at least 1 if creeps dont have job they should upgrade
+
+                //  extracting
+
+                //  repair walls and ramparts
+
+                //  long distance harvesting
+
+                
+                room.memory.jobs = jobs;
+            },
+
+
+
+
 
             // Find all available energy opportunities
             energy: function(creep)
             {
-                // Find Containers
+                let room = creep.room;
+                // Find Containers by how many
+                var container = room.find(FIND_STRUCTURES, 
+                    {
+                        filter: s => (s.structureType === STRUCTURE_CONTAINER &&
+                                    s.store[RESOURCE_ENERGY] > (getCreepBody(creep,'CARRY') * 50))
+                    });
+
                 // Find Storage
+                var storage = room.find(FIND_STRUCTURES, 
+                    {
+                        filter: s => (s.structureType === STRUCTURE_STORAGE &&
+                                    s.store[RESOURCE_ENERGY] > (getCreepBody(creep,'CARRY') * 50))
+                    });
+
                 // Find Terminal
+                if(room.terminal && room.terminal.store[RESOURCE_ENERGY] > (getCreepBody(creep,'CARRY') * 50))
+                {
+                    var temrinal = room.terminal
+                }
+
+
                     // Decide jobs based on amount
                 
                 // Find sources
                     // no job if a miner is present
                     // Decide jobs based on available spaces
 
+                    
             }
         }
     }

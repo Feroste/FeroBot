@@ -139,6 +139,7 @@ module.exports =
                 var targets = creep.room.find(FIND_MINERALS);
                 target = targets[0];
                 creep.memory.depositId = target.id;
+                creep.memory.mineralType = target.mineralType;
             }
         }
 
@@ -488,14 +489,15 @@ module.exports =
     // Check to see how much energy creep has, if the creep should switch working states*
     checkWorking: function(creep)
     {
-        // Only eco creeps have working memory
+        // Most creeps should have working memory
         if (creep.memory.working === undefined)
-        {throw 'Not an eco creep';}
+        {throw 'Rogue Creep';}
         // if creep is using energy but has no energy left
         if (creep.memory.working === true && creep.carry.energy == 0) 
         {
             // switch state
             creep.memory.working = false;
+            delete creep.memory.job
             return false;
         }
         // if creep is getting energy but is full
@@ -503,18 +505,44 @@ module.exports =
         {
             // switch state
             creep.memory.working = true;
+            delete creep.memory.job
             return true;
         }
     },
 
+    // Returns number of specified body part
+    checkForPart: function(creep, arg)
+    {
+        let count = 0;
+        for (partNumber of creep.body)
+        {
+            let partType = partNumber.type;
+            if (partType == arg)
+            {
+                count += 1;
+            }
+        }
+        return count;
+    },
+
+    // Will pickup resources [WIP]
     pickup: function(creep, arg)
     {
         // let tombstones = creep.pos.findClosestByRange(FIND_TOMBSTONES);
         // let dropped = creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES);
     },
 
+    // Will wander around origin [WIP]
     wander: function(creep)
     {
         // Have creep move around an anchor point.
+    },
+
+    // Generates random 4 character IDs
+    idGenerator: () => 
+    {
+        return Math.floor((1 + Math.random()) * 0x10000)
+            .toString(16)
+            .substring(1);
     }
 }
