@@ -10,6 +10,22 @@ const roomLogic = require('room.controller');
                 module.exports.loop = function () 
 {
 
+    // Main interface for interactions
+    if (Memory.Interface === undefined || Memory.Interface.reset === true)
+    {
+        Memory.Interface =
+        {
+            sendAttacker: null,
+            sendHelp: null,
+            claimRoom: null,
+            visualizations: 
+            {
+                creepReports: false,
+                paths: true
+            },
+            reset: false
+        }
+    }
                //------Register Creep Roles------//
 
     // for every creep in Game.creeps
@@ -40,16 +56,16 @@ const roomLogic = require('room.controller');
         console.log(`Bucketed CPU: ${Game.cpu.bucket}`);
         console.log(`Game Tick: ${Game.time}`);
             // if 10,000 cpu, make a pixel
-            if (Game.cpu.bucket < 10000)
-            {
-                let pixelpercent = Math.floor((Game.cpu.bucket/ 10000) * 100);
-                console.log(`Pixel Progress: ${pixelpercent}%`);
-            }
-            else
-            {
-               console.log('!!! --- !!! MADE PIXEL !!! --- !!!');
-               Game.cpu.generatePixel();
-            }
+            // if (Game.cpu.bucket < 10000)
+            // {
+            //     let pixelpercent = Math.floor((Game.cpu.bucket/ 10000) * 100);
+            //     console.log(`Pixel Progress: ${pixelpercent}%`);
+            // }
+            // else
+            // {
+            //    console.log('!!! --- !!! MADE PIXEL !!! --- !!!');
+            //    Game.cpu.generatePixel();
+            // }
         console.log('// --- End   Report --- //')
 
             // ALSO CLEAR DEAD CREEPS FROM MEMORY

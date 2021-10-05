@@ -153,7 +153,7 @@ module.exports = function()
         CARRY,CARRY,CARRY,CARRY,
         MOVE,MOVE,MOVE,MOVE,
         MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE], undefined, 
-                    { role: 'extractor'});
+                    { role: 'extractor', working: true});
     }; 
 
     // MINER

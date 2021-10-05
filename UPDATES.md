@@ -117,4 +117,17 @@
     -- Added ID generator
     -- Added part Checker
 
+    1.1.3 update Log
+    ==============================
+    -- Fixed moving to target rooms behavior and optimized roles further
+    -- Optimized giant spawn check 
+        still need to figure out new behavior
+    -- Added 'Interface' to memory paths for simpler game interactions
+        will slowly add intended features as I refactor
+    -- Added more room memory variables for job handling
+    -- Adding more creep memory variables for future use
+    -- Started work on combine role
+        will combine all main eco roles into one
+        creeps moving forward will be split by roles which then filter for jobs
+        jobs have a type
 .

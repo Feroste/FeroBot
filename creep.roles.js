@@ -20,18 +20,52 @@ module.exports =
         attacker
         claimer
     */
-    harvester: function(creep)
+
+
+
+    combine: function(creep)
     {
-        // if not in target room
-        if (creep.memory.target !== undefined && creep.room.name != creep.memory.target) 
+        function find(room, job)
         {
-            // move towards it
-            subroutine.moveToRoom(creep);
+            return _.sum(Game.creeps, c => c.memory.targetRoom == room && c.job == job)
+        }
+    // harvester
+    // upgrader
+    // builder
+    // repairer
+        if (creep.memory.working === true)
+        {
+            switch(true)
+            {
+                case (find(creep.memory.targetRoom, 'store') < room.memory.jobs.storeJobs):
+                    break;
+            }
         }
 
-        // Check to see if the creep should switch states
-        subroutine.checkWorking(creep);
+        else
+        {
 
+        }
+
+        // run the assigned job
+        subroutine.run(creep)
+    },
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    harvester: function(creep)
+    {
         // if creep is supposed to transfer energy to the spawn or an extension
         if (creep.memory.working === true) 
         {
@@ -41,7 +75,7 @@ module.exports =
                 subroutine.store(creep);
             }
             // else switch hats
-            catch
+            catch (e)
             {
                 this.builder(creep);
             }
@@ -63,7 +97,7 @@ module.exports =
             {
                 subroutine.getFromStorage(creep);
             }
-            catch
+            catch (e)
             {
                 subroutine.harvest(creep);
             }
@@ -72,17 +106,6 @@ module.exports =
 
     upgrader: function(creep)
     {
-        // if not in target room
-        if (creep.memory.target !== undefined && creep.room.name != creep.memory.target) 
-        {
-            // move towards it
-            subroutine.moveToRoom(creep);
-        }
-        
-            
-        // Check to see if the creep should switch states
-        subroutine.checkWorking(creep);
-
         // if creep is supposed to transfer energy to the controller
         if (creep.memory.working === true) 
         {
@@ -106,7 +129,7 @@ module.exports =
                 subroutine.getFromStorage(creep);
             }
 
-            catch
+            catch (e)
             {
                 subroutine.harvest(creep);
             }
@@ -115,18 +138,6 @@ module.exports =
 
     builder: function(creep)
     {
-        // if target is defined and creep is not in target room
-        // Exclude long distance harvesters so they dont get confused when role changing
-        if (creep.memory.target !== undefined && creep.room.name != creep.memory.target 
-            && creep.memory.role != 'longDistanceHarvester') 
-        {
-            // move towards it
-            subroutine.moveToRoom(creep);
-        }
-
-        // Check to see if the creep should switch states
-        subroutine.checkWorking(creep);
-
         // if creep is supposed to complete a constructionSite
         if (creep.memory.working === true) 
         {
@@ -134,7 +145,7 @@ module.exports =
             {
                 subroutine.build(creep);
             }
-            catch
+            catch (e)
             {
                 this.upgrader(creep);
             }
@@ -147,7 +158,7 @@ module.exports =
             {
                 subroutine.getFromStorage(creep);
             }
-            catch
+            catch (e)
             {
                 subroutine.harvest(creep);
             }
@@ -156,9 +167,6 @@ module.exports =
 
     repairer: function(creep)
     {
-        // Check to see if the creep should switch states
-        subroutine.checkWorking(creep);
-
         // if creep is supposed to repair something
         if (creep.memory.working === true) 
         {
@@ -167,7 +175,7 @@ module.exports =
                 subroutine.repair(creep);
             }
             // if we can't
-            catch
+            catch (e)
             {
                 // look for construction sites
                 this.builder(creep);
@@ -181,7 +189,7 @@ module.exports =
             {
                 subroutine.getFromStorage(creep);
             }
-            catch
+            catch (e)
             {
                 subroutine.harvest(creep);
             }
@@ -201,7 +209,7 @@ module.exports =
                 subroutine.wallBuild(creep);
             }
             // if we can't find one
-            catch 
+            catch (e)
             {
                 // Switch hats
                 this.builder(creep);
@@ -215,7 +223,7 @@ module.exports =
             {
                 subroutine.getFromStorage(creep);
             }
-            catch
+            catch (e)
             {
                 subroutine.harvest(creep);
             }
@@ -493,15 +501,6 @@ module.exports =
 
     claimer: function(creep)
     {
-        // if not in target room
-        if (creep.memory.target != undefined && creep.room.name != creep.memory.target) 
-        {
-            // move towards it
-            subroutine.moveToRoom(creep);
-        }
-        else 
-        {
-            subroutine.claim(creep);
-        }
+        subroutine.claim(creep);
     }
 }

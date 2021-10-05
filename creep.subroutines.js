@@ -3,26 +3,21 @@
 module.exports =
 {
     // Running this module will execute a behavior based on
-    // creep.memory.job.type*
+    // creep.memory.job*
     run: function(creep)
     {
         if(!creep.memory.job)
         {throw 'No job';}
-        // if not in target room
-        if (creep.room.name != creep.memory.job.room) 
-        {
-            // move towards it
-            subroutine.moveToRoom(creep, creep.memory.job.room);
-        }
+
         // Switch statement for job types
-        switch(creep.memory.job.type)
+        switch(creep.memory.job)
         {
             default: 
                 this.wander(creep);
                 creep.say('Job type invalid');
                 break;
             case 'harvest':
-                this.harvest(creep, creep.memory.job.arg);
+                this.harvest(creep, creep.memory.targetID);
                 break;
             case 'store':
                 this.store(creep);
@@ -53,6 +48,12 @@ module.exports =
                 break;
             case 'claim':
                 this.claim(creep);
+                break;
+            case 'pickup':
+                this.pickup(creep);
+                break;
+            case 'wander':
+                this.wander(creep);
                 break;
         }
     },
@@ -449,7 +450,7 @@ module.exports =
 
             // If my room, sign it
             case 'Feroste':
-                if(creep.signController(controller, "Veni Vidi Vici") == ERR_NOT_IN_RANGE) 
+                if(creep.signController(controller, "[WIP]") == ERR_NOT_IN_RANGE) 
                 {
                     creep.moveTo(controller);
                 }
@@ -470,17 +471,22 @@ module.exports =
     {
         if (arg)
         {
+            if (creep.room.name == arg)
+            {throw 'Already in Room';}
             var exit = creep.room.findExitTo(arg);
         }
 
         else
         {
+            if (creep.memory.targetRoom === undefined)
+            {throw 'No target Room';}
+            if (creep.room.name == creep.memory.targetRoom)
+            {throw 'Already in Room';}
             // find exit to target room
-            var exit = creep.room.findExitTo(creep.memory.target);
+            var exit = creep.room.findExitTo(creep.memory.targetRoom);
         }
-
         if (!exit)
-        {throw 'No target room defined';}
+        {throw 'No Exit found';}
 
         // move to exit
         creep.moveTo(creep.pos.findClosestByPath(exit));
@@ -497,7 +503,6 @@ module.exports =
         {
             // switch state
             creep.memory.working = false;
-            delete creep.memory.job
             return false;
         }
         // if creep is getting energy but is full
@@ -505,7 +510,6 @@ module.exports =
         {
             // switch state
             creep.memory.working = true;
-            delete creep.memory.job
             return true;
         }
     },
