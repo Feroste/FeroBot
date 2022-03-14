@@ -21,8 +21,6 @@ module.exports =
         claimer
     */
 
-
-
     combine: function(creep)
     {
         function find(room, job)
@@ -54,16 +52,6 @@ module.exports =
 
 
 
-
-
-
-
-
-
-
-
-
-    
     harvester: function(creep)
     {
         // if creep is supposed to transfer energy to the spawn or an extension
@@ -369,6 +357,7 @@ module.exports =
     {
         // get source
         let source = Game.getObjectById(creep.memory.sourceId);
+        
         // find container next to source
         let container = source.pos.findInRange(FIND_STRUCTURES, 1, 
         {

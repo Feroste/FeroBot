@@ -1,4 +1,4 @@
-require('spawn.prototype')();
+require('require');
 
 module.exports = 
 {
@@ -48,28 +48,6 @@ module.exports =
                 
         // creep name
         let name = undefined;
-
-        // SET A MINER FOR EACH SOURCE WITH A CONTAINER
-        let sources = room.find(FIND_SOURCES);
-        for (let source of sources)
-        {
-            if (!_.some(Game.creeps, c => c.memory.sourceId == source.id))
-            {
-                let containers = source.pos.findInRange(FIND_STRUCTURES, 1 , 
-                {
-                    filter: s => s.structureType ==STRUCTURE_CONTAINER
-                });
-
-                if(containers.length && energy >= 550)
-                {
-                    name = spawn.createMiner(source.id);
-                    if (room.memory.jobs.lorryJobs == 0)
-                    {
-                        room.memory.jobs.lorryJobs = 1;
-                    }
-                }
-            }
-        }
 
         switch(true)
         {
@@ -125,18 +103,18 @@ module.exports =
                 name = spawn.createCustomCreep(energy, 'wallRepairer');
                 break;
 
-            case (room.memory.claimRoom !== undefined):
-                name = spawn.createClaimer(room.memory.claimRoom, 1);
+            case (room.memory.claim !== undefined):
+                name = spawn.createClaimer(room.memory.claim, 1);
                 if (!(name < 0)) 
                 {
-                    delete room.memory.claimRoom;
+                    delete room.memory.claim;
                 }
                 break;
 
-            case (room.memory.reserveRoom0 !== undefined):
-                if (find('claimer', room.memory.reserveRoom0) < 1)
+            case (room.memory.reserve !== undefined):
+                if (find('claimer', room.memory.reserve) < 1)
                 {
-                    name = spawn.createClaimer(room.memory.reserveRoom0, -1);
+                    name = spawn.createClaimer(room.memory.reserve, -1);
                 }
                 break;
 
@@ -144,9 +122,30 @@ module.exports =
                 name = -1;
                 break;
         }
+        // SET A MINER FOR EACH SOURCE WITH A CONTAINER
+        let sources = room.find(FIND_SOURCES);
+        for (let source of sources)
+        {
+            if (!_.some(Game.creeps, c => c.memory.sourceId == source.id))
+            {
+                let containers = source.pos.findInRange(FIND_STRUCTURES, 1 , 
+                {
+                    filter: s => s.structureType == STRUCTURE_CONTAINER
+                });
+
+                if (containers.length && energy >= 550)
+                {
+                    name = spawn.createMiner(source.id);
+                    if (room.memory.jobs.lorryJobs == 0)
+                    {
+                        room.memory.jobs.lorryJobs = 1;
+                    }
+                }
+            }
+        }
 
             // ----- // PRINT SPAWN LOG // ----- //
-        if (!(name < 0)) 
+        if (!(name < 0) && Memory.Interface.Visualizations.Logs === true) 
         {
             console.log('========================================');
             console.log(`Log Results for : ${room.name}`);

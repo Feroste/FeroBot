@@ -410,60 +410,115 @@ module.exports =
     // Will use a claim part autonomously depending on owner of room
     claim: function(creep)
     {
-        let controller = creep.room.controller;
-        var owner = undefined;
-        if (controller.owner !== undefined)
+        var controller = creep.room.controller;
+        if (!creep.pos.inRangeTo(controller,1))
         {
-            // Set Owner
-            owner = controller.owner.username;
-            if (!controller.my)
+            creep.moveTo(controller);
+        }
+        else
+        {
+            var owner = undefined;
+            if (controller.owner !== undefined)
             {
-            // Set Enemy
-            owner = 'ENEMY';
+                // Set Owner
+                owner = controller.owner.username;
+                if (!controller.my)
+                {
+                // Set Enemy
+                owner = 'ENEMY';
+                }
+            }
+
+            // Decide what to do based on owner of target room
+            switch (owner)
+            {
+                // If neutral, check for claim signal (creep.memory.order = 1)
+                default:
+                    if (creep.memory.order == 1)
+                    {
+                        // CLAIM
+                        creep.claimController(controller);
+                    }
+                    else                     // ADD A TRY CHECK IF INVALID NEUTRAL SO SWITCH TO ATTACK
+                    {
+                        // RESERVE [Currenty delete claim memory to reserve]
+                        creep.reserveController(controller);
+                    }
+                    break;
+
+                // If my room, sign it
+                case 'Feroste':
+                    creep.signController(controller, "[WIP]");
+                    break;
+
+                // If ENEMY, attack
+                case 'ENEMY':
+                    creep.attackController(controller);
+                    break;
             }
         }
-        
+    },
 
-        // Decide what to do based on owner of target room
-        switch (owner)
-        {
-            // If neutral, check for claim signal (creep.memory.order = 1)
-            default:
-                if (creep.memory.order == 1)
-                {
-                    // CLAIM
-                    if(creep.claimController(controller) === ERR_NOT_IN_RANGE) 
-                    {
-                        creep.moveTo(controller);
-                    }
-                }
-                else                     // ADD A TRY CHECK IF INVALID NEUTRAL SO SWITCH TO ATTACK
-                {
-                    // RESERVE [Currenty delete claim memory to reserve]
-                    if(creep.reserveController(controller) === ERR_NOT_IN_RANGE) 
-                    {
-                        creep.moveTo(controller);
-                    }
-                }
-                break;
+    // Will say a string of any length over several ticks [WIP]
+    say: function(creep, arg)
+    {
+        creep.say(arg);
 
 
-            // If my room, sign it
-            case 'Feroste':
-                if(creep.signController(controller, "[WIP]") == ERR_NOT_IN_RANGE) 
-                {
-                    creep.moveTo(controller);
-                }
-                break;
+        // if (!creep.memory.saying) creep.memory.saying = {};
 
-            // If ENEMY, attack
-            case 'ENEMY':
-                if (creep.attackController(controller) === ERR_NOT_IN_RANGE) 
-                {
-                    creep.moveTo(controller);
-                }
-                break;
-        }
+        // const currentHash = hashCode(arg);
+        // const sayData = creep.memory.saying;
+        // if (!sayData.text || sayData.hash !== currentHash) {
+        //   sayData.text = arg;
+        //   sayData.hash = currentHash;
+        // }
+      
+        // creep.say(sayData.substring(0, 10));
+        // sayData.text = sayData.text.substring(10);
+        // return Boolean(sayData.text); // continue talking?
+
+
+
+
+        // if(arg.length > 10)
+        // {
+        //     if(creep.memory.string != arg) 
+        //     {
+        //         creep.memory.string = arg;
+        //         creep.memory.saying = 0;
+        //     }
+        //     string = creep.memory.string
+        //     let parts = string.length / 10;
+        //     if (creep.memory.saying === undefined)
+        //     {creep.memory.saying = 0;}
+        //     for (let i = 0; i < parts; i++)
+        //     {
+        //         if (i == creep.memory.saying)
+        //         {
+        //             let index1 = creep.memory.saying * 9
+        //             let index2 = 9 * (creep.memory.saying + 1);
+        //             part = string.slice(index1, index2);
+        //             creep.say(part);
+        //             creep.memory.saying += 1;
+        //             break;
+        //         }
+        //     }
+
+        //     if(creep.memory.saying > parts)
+        //     {delete creep.memory.saying;
+        //      delete creep.memory.string;}
+        // }
+        // else
+        // {
+        //     creep.say(arg);
+        // }
+    },
+
+    // Will move using custom pathfinding and unique path visuals [WIP]
+    move: function(creep, target, arg)
+    {
+
     },
 
     // Will move to whatever room is designated in creep.memory.target*^
@@ -480,7 +535,7 @@ module.exports =
         {
             if (creep.memory.targetRoom === undefined)
             {throw 'No target Room';}
-            if (creep.room.name == creep.memory.targetRoom)
+            if (creep.pos.roomName == creep.memory.targetRoom)
             {throw 'Already in Room';}
             // find exit to target room
             var exit = creep.room.findExitTo(creep.memory.targetRoom);
@@ -501,6 +556,10 @@ module.exports =
         // if creep is using energy but has no energy left
         if (creep.memory.working === true && creep.carry.energy == 0) 
         {
+            if(Memory.Interface.Visualizations.Reports === true)
+            {
+                this.say(creep, 'Not Working');
+            }
             // switch state
             creep.memory.working = false;
             return false;
@@ -508,6 +567,10 @@ module.exports =
         // if creep is getting energy but is full
         else if (creep.memory.working === false && creep.carry.energy == creep.carryCapacity) 
         {
+            if(Memory.Interface.Visualizations.Reports === true)
+            {
+                this.say(creep, 'Working');
+            }
             // switch state
             creep.memory.working = true;
             return true;
@@ -515,18 +578,9 @@ module.exports =
     },
 
     // Returns number of specified body part
-    checkForPart: function(creep, arg)
+    checkForPart: function(creep, partType)
     {
-        let count = 0;
-        for (partNumber of creep.body)
-        {
-            let partType = partNumber.type;
-            if (partType == arg)
-            {
-                count += 1;
-            }
-        }
-        return count;
+        return _.filter(creep.body, part => part.type == partType).length;
     },
 
     // Will pickup resources [WIP]
@@ -540,13 +594,5 @@ module.exports =
     wander: function(creep)
     {
         // Have creep move around an anchor point.
-    },
-
-    // Generates random 4 character IDs
-    idGenerator: () => 
-    {
-        return Math.floor((1 + Math.random()) * 0x10000)
-            .toString(16)
-            .substring(1);
     }
 }
