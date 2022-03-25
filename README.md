@@ -1,13 +1,10 @@
 # Screeps
 
-    Make sure to add your room to memory watch paths so you can edit creep numbers, energy limit, etc
+    Make sure to add your rooms and 'Interface' to memory watch paths so you can edit creep numbers, energy limit, and issue commands, etc.
         ex. rooms.N11E22
+        ex. Interface
 
     'attackFlag' = sends a number of melee attackers to the room
-
-    Claim a room
-        ex.   Game.rooms.ROOMNAME.memory.claimRoom = 'W12N21'
-        ex.   Game.rooms.ROOMNAME.memory.reserveRoom0 = 'W21N12'
 
     Buy energy
         ex. Game.market.createOrder('buy',RESOURCE_ENERGY,.4,250000,'W39N59')
@@ -20,13 +17,14 @@
     ================================================================================
                                         Features
     - Automatic start
+    - Command Interface with multiroom support
     - Range of basic creep subroutines
     - Role orientated creeps
     - Progressive body building
     - DEFCON system
     - Easy Claim
     - Light Energy Economy
-    - Path visuals
+    - Path visuals and HUD
     ================================================================================
     --------------------------------------------------------------------------------
     ================================================================================

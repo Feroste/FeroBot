@@ -5,7 +5,14 @@ module.exports =
             //----------//  EXECUTE DEALS  //----------//
         if (room.terminal && (Game.time % 200 == 0)) 
         {
-            if (room.terminal.store[RESOURCE_ENERGY] >= 5000)
+            // PROTECTION MONEY
+            if(room.terminal && room.terminal.store[RESOURCE_LEMERGIUM] >= 1000)
+            {
+                Game.rooms['W37S48'].terminal.send(RESOURCE_LEMERGIUM, room.terminal.store[RESOURCE_LEMERGIUM], 'W38S51', 'Protection Money');
+                console.log('Resources sent');
+            }
+
+            else if (room.terminal.store[RESOURCE_ENERGY] > 25000)
             {
                 let orders = Game.market.getAllOrders(order => order.resourceType == RESOURCE_ENERGY &&
                                                     order.type == ORDER_BUY &&

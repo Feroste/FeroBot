@@ -1,5 +1,6 @@
 const spawnLogic = require('spawn.controller');
 const towerLogic = require('tower.controller');
+const terminalLogic = require('controller.terminal');
 const data = require('memory.manager');
 const visuals = require('visuals');
 
@@ -40,6 +41,9 @@ module.exports =
         {
             towerLogic.run(roomTowers[t]);
         }
+
+        //---------// Terminal Control //--------//
+        terminalLogic.run(room);
 
         // ----- // DEFCON SYSTEM // ----- //
         // Check how bad it is and react accordingly

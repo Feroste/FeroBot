@@ -41,16 +41,16 @@ const visuals = require('visuals');
         console.log(`Bucketed CPU: ${Game.cpu.bucket}`);
         console.log(`Game Tick: ${Game.time}`);
             // if 10,000 cpu, make a pixel
-            // if (Game.cpu.bucket < 10000)
-            // {
-            //     let pixelpercent = Math.floor((Game.cpu.bucket/ 10000) * 100);
-            //     console.log(`Pixel Progress: ${pixelpercent}%`);
-            // }
-            // else
-            // {
-            //    console.log('!!! --- !!! MADE PIXEL !!! --- !!!');
-            //    Game.cpu.generatePixel();
-            // }
+            if (Game.cpu.bucket < 10000)
+            {
+                let pixelpercent = Math.floor((Game.cpu.bucket/ 10000) * 100);
+                console.log(`Pixel Progress: ${pixelpercent}%`);
+            }
+            else
+            {
+               console.log('!!! --- !!! MADE PIXEL !!! --- !!!');
+               Game.cpu.generatePixel();
+            }
         console.log('// --- End   Report --- //')
 
             // ALSO CLEAR DEAD CREEPS FROM MEMORY

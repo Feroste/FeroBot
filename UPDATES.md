@@ -130,4 +130,19 @@
         will combine all main eco roles into one
         creeps moving forward will be split by roles which then filter for jobs
         jobs have a type
+
+    1.1.4 update Log
+    ===============================
+    -- Added room HUD from 'Overmind'
+    -- Also stole the community profiler
+    -- Interface mostly functional
+
+    1.1.5 update Log
+    ================================
+    -- Connected terminal to room controller to automatically execute deals on energy
+    -- Protection Resources
+    -- Extractor improvements
+        Will deposit to terminal first
+        Automatic spawning
+    -- Lorries should now deposit energy into terminal when storage is at limit
 .

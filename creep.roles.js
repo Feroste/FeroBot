@@ -408,12 +408,12 @@ module.exports =
         } 
         else 
         {
-            // if (creep.room.terminal && _.sum(creep.room.terminal.store) < 250000) {
-            //     if (creep.transfer(creep.room.terminal, creep.memory.mineralType) == ERR_NOT_IN_RANGE) {
-            //         creep.moveTo(creep.room.terminal);
-            //     }
-            // } 
-            if (creep.room.storage) 
+            if (creep.room.terminal && _.sum(creep.room.terminal.store) < 250000) {
+                if (creep.transfer(creep.room.terminal, creep.memory.mineralType) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(creep.room.terminal);
+                }
+            } 
+            else if (creep.room.storage) 
             {
                 if (creep.transfer(creep.room.storage, creep.memory.mineralType) == ERR_NOT_IN_RANGE) 
                 {
@@ -448,6 +448,10 @@ module.exports =
             else if (structure == undefined && creep.room.storage != undefined && creep.room.storage.store[RESOURCE_ENERGY] < 750000) 
             {
                 structure = creep.room.storage;
+            }
+            else if(structure == undefined && creep.room.terminal != undefined && creep.room.terminal.store[RESOURCE_ENERGY] < 200000)
+            {
+                structure = creep.room.terminal;
             }
 
             // if we found one

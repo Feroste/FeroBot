@@ -144,6 +144,19 @@ module.exports =
             }
         }
 
+        // AUTOMATICALLY HANDLE EXTRACTING
+        let mineral = room.find(FIND_MINERALS);
+        let extractor = room.find(FIND_MY_STRUCTURES, {filter: (s) => (s.structureType === STRUCTURE_EXTRACTOR)});
+        if(extractor && mineral.mineralAmount > 0)
+        {
+            room.memory.jobs.scientistJobs = 1;
+        }
+        else
+        {
+            room.memory.jobs.scientistJobs = 0;
+        }
+
+
             // ----- // PRINT SPAWN LOG // ----- //
         if (!(name < 0) && Memory.Interface.Visualizations.Logs === true) 
         {
