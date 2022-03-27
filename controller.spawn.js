@@ -83,24 +83,28 @@ module.exports =
                 name = spawn.createAttacker(hardCap, flags.attackFlag.pos.roomName);
                 break;
 
+            case (room.memory.harvest !== undefined && find('longDistanceHarvester',room.memory.harvest) == 0):
+                name = spawn.createLongDistanceHarvester(energy, 10, room.roomName, room.memory.harvest, 0);
+                break;
+
             case (getCreepCount('upgrader') < room.memory.jobs.upgradeJobs):
                 name = spawn.createCustomCreep(energy, 'upgrader');
-                break;
-
-            case (getCreepCount('extractor') < room.memory.jobs.scientistJobs):
-                name = spawn.createExtractor();
-                break;
-
-            case (getCreepCount('repairer') < room.memory.jobs.repairJobs):
-                name = spawn.createCustomCreep(energy, 'repairer');
                 break;
 
             case (getCreepCount('builder') < room.memory.jobs.buildJobs):
                 name = spawn.createCustomCreep(energy, 'builder');
                 break;
 
+            case (getCreepCount('repairer') < room.memory.jobs.repairJobs):
+                name = spawn.createCustomCreep(energy, 'repairer');
+                break;
+
             case (getCreepCount('wallRepairer') < room.memory.jobs.wallRepairJobs):
                 name = spawn.createCustomCreep(energy, 'wallRepairer');
+                break;
+    
+            case (getCreepCount('extractor') < room.memory.jobs.scientistJobs):
+                name = spawn.createExtractor();
                 break;
 
             case (room.memory.claim !== undefined):
@@ -145,9 +149,10 @@ module.exports =
         }
 
         // AUTOMATICALLY HANDLE EXTRACTING
-        let mineral = room.find(FIND_MINERALS);
+        // let mineral = room.find(FIND_MINERALS[0]);
         let extractor = room.find(FIND_MY_STRUCTURES, {filter: (s) => (s.structureType === STRUCTURE_EXTRACTOR)});
-        if(extractor && mineral.mineralAmount > 0)
+        
+        if(room.energyCapacityAvailable > 1900 && extractor && room.find(FIND_MINERALS)[0].mineralAmount > 0)
         {
             room.memory.jobs.scientistJobs = 1;
         }

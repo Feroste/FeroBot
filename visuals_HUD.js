@@ -168,20 +168,20 @@ var HUD =
         fontSize = 0.5 * fontScale;
         style.font = fontSize + " Courier";
 
-        if (Game.cpu.bucket > 9500 || Game.time % 25 == 0) 
-        {
+        // if (Game.cpu.bucket > 9500 || Game.time % 25 == 0) 
+        // {
             this.getOwnedRoomInfo();
             // this.getOccupiedRoomInfo();
             this.drawRoomInfo();
-        } 
-        else 
-        {
-            this.drawRoomInfo();
-            let dt = Game.time - Memory.visuals.HUD.lastCalculated;
-            style.color = "#ff0000";
-            new RoomVisual().text("Low CPU: cached data (" + dt + " ticks old)",
-                                  column, row, style);
-        }
+        // } 
+        // else 
+        // {
+        //     this.drawRoomInfo();
+        //     let dt = Game.time - Memory.visuals.HUD.lastCalculated;
+        //     style.color = "#ff0000";
+        //     new RoomVisual().text("Low CPU: cached data (" + dt + " ticks old)",
+        //                           column, row, style);
+        // }
     }
 };
 

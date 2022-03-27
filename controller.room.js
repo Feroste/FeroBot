@@ -1,5 +1,5 @@
-const spawnLogic = require('spawn.controller');
-const towerLogic = require('tower.controller');
+const spawnLogic = require('controller.spawn');
+const towerLogic = require('controller.tower');
 const terminalLogic = require('controller.terminal');
 const data = require('memory.manager');
 const visuals = require('visuals');

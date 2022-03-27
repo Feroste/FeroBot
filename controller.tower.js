@@ -10,7 +10,7 @@ module.exports =
             {
                 if(structure.structureType == STRUCTURE_WALL || structure.structureType == STRUCTURE_RAMPART)
                 {
-                    return (structure.hits < 10000)
+                    return (structure.hits < tower.room.memory.turretSupport)
                 }
                 else
                 {

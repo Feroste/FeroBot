@@ -60,14 +60,12 @@ module.exports =
                     wallRepairJobs: 0,
                     scientistJobs: 0,
                 },
-                sources:{},
+                sources: room.find(FIND_SOURCES),
                 energyLimit: 1000,
+                turretSupport: 10000,
                 queue: 0,
                 reset: false
             }
-
-            // Source function
-            //sources = room.find()
         }
 
         // RESET ROOMS

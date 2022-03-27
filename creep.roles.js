@@ -1,3 +1,4 @@
+require('require');
 const subroutine = require('creep.subroutines');
 
 module.exports =
@@ -49,9 +50,6 @@ module.exports =
         subroutine.run(creep)
     },
 
-
-
-
     harvester: function(creep)
     {
         // if creep is supposed to transfer energy to the spawn or an extension
@@ -72,16 +70,7 @@ module.exports =
         // if creep is supposed to harvest energy from source
         else 
         {
-            
-            if(creep.room.terminal !== undefined && creep.room.terminal.store[RESOURCE_ENERGY] > 50000)
-            {
-                if (creep.withdraw(creep.room.terminal, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE)
-                {
-                    creep.moveTo(creep.room.terminal, {visualizePathStyle: {stroke:'yellow', lineStyle: 'dashed', opacity: .5}});
-                } 
-            }
-
-            else try 
+            try 
             {
                 subroutine.getFromStorage(creep);
             }
@@ -104,19 +93,10 @@ module.exports =
         // if creep is supposed to harvest energy from source
         else 
         {
-            if(creep.room.terminal !== undefined && creep.room.terminal.store[RESOURCE_ENERGY] > 50000)
-            {
-                if (creep.withdraw(creep.room.terminal, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE)
-                {
-                    creep.moveTo(creep.room.terminal, {visualizePathStyle: {stroke:'yellow', lineStyle: 'dashed', opacity: .5}});
-                } 
-            }
-
-            else try 
+            try 
             {
                 subroutine.getFromStorage(creep);
             }
-
             catch (e)
             {
                 subroutine.harvest(creep);
@@ -348,7 +328,14 @@ module.exports =
             // If in the right room
             else
             {
-                subroutine.attack(creep);
+                try
+                {                
+                    subroutine.attack(creep);
+                }
+                catch(e)
+                {
+                    creep.moveTo(room.controller);
+                }
             }
         }
     },
@@ -410,14 +397,14 @@ module.exports =
         {
             if (creep.room.terminal && _.sum(creep.room.terminal.store) < 250000) {
                 if (creep.transfer(creep.room.terminal, creep.memory.mineralType) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(creep.room.terminal);
+                    creep.moveTo(creep.room.terminal, {visualizePathStyle: {stroke:'orange', lineStyle:'dotted', opacity: .5}});
                 }
             } 
             else if (creep.room.storage) 
             {
                 if (creep.transfer(creep.room.storage, creep.memory.mineralType) == ERR_NOT_IN_RANGE) 
                 {
-                    creep.moveTo(creep.room.storage);
+                    creep.moveTo(creep.room.storage, {visualizePathStyle: {stroke:'orange', lineStyle:'dotted', opacity: .5}});
                 }
             }
         }

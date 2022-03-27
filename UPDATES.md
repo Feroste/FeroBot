@@ -145,4 +145,13 @@
         Will deposit to terminal first
         Automatic spawning
     -- Lorries should now deposit energy into terminal when storage is at limit
+
+    1.1.6 update Log
+    ================================
+    -- Added variable for turret wall/rampart support
+    -- Fixed extractor spawning priority and energy need
+        Still need to filter for extractor actually existing
+    -- Added extractor path visuals
+    -- Moved terminal energy checks into getFromStorage method
+    -- Started fixing LD Harvesters
 .

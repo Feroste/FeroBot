@@ -149,7 +149,7 @@ module.exports =
         
         if (creep.harvest(target) === ERR_NOT_IN_RANGE) 
         {
-            creep.moveTo(target);
+            creep.moveTo(target, {visualizePathStyle: {stroke:'orange', lineStyle:'dotted', opacity: .5}});
         }
     },
 
@@ -165,13 +165,23 @@ module.exports =
         // No arg, find available storage
         else
         {
-            var container = creep.pos.findClosestByPath(FIND_STRUCTURES, 
+            if(creep.room.terminal !== undefined && creep.room.terminal.store[RESOURCE_ENERGY] > 50000)
+            {
+                if (creep.withdraw(creep.room.terminal, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE)
                 {
-                    filter: s => (s.structureType === STRUCTURE_STORAGE &&
-                                s.store[RESOURCE_ENERGY] > 2000)
-                                || (s.structureType === STRUCTURE_CONTAINER &&
-                                s.store[RESOURCE_ENERGY] >1000)
-                });
+                    creep.moveTo(creep.room.terminal, {visualizePathStyle: {stroke:'yellow', lineStyle: 'dashed', opacity: .5}});
+                } 
+            }
+            else
+            {
+                var container = creep.pos.findClosestByPath(FIND_STRUCTURES, 
+                    {
+                        filter: s => (s.structureType === STRUCTURE_STORAGE &&
+                                    s.store[RESOURCE_ENERGY] > 2000)
+                                    || (s.structureType === STRUCTURE_CONTAINER &&
+                                    s.store[RESOURCE_ENERGY] >1000)
+                    });
+            }
         }
 
         // Try getting from storage
@@ -387,6 +397,7 @@ module.exports =
 
         else
         {
+            var walls = creep.room.find(FIND_STRUCTURES, {filter: (s) => s.structureType == STRUCTURE_WALL});
             let enemyspawn = creep.room.find(FIND_HOSTILE_SPAWNS);
             let hostiles = creep.room.find(FIND_HOSTILE_CREEPS);
 
@@ -403,7 +414,7 @@ module.exports =
         // Try to attack
         if (creep.attack(target) === ERR_NOT_IN_RANGE) 
         {
-            creep.moveTo(target);
+            console.log(creep.moveTo(target));
         }
     },
 
