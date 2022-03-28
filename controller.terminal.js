@@ -12,6 +12,8 @@ module.exports =
                 console.log('Resources sent');
             }
 
+
+            // SELL EXCESS ENERGY IN BATCHES
             else if (room.terminal.store[RESOURCE_ENERGY] > 25000)
             {
                 let orders = Game.market.getAllOrders(order => order.resourceType == RESOURCE_ENERGY &&

@@ -49,6 +49,7 @@ module.exports =
         // creep name
         let name = undefined;
 
+        // PRIMARY SPAWN PRIORITY
         switch(true)
         {
             // Fall Back Method In Case Economy is Wiped Out
@@ -84,7 +85,7 @@ module.exports =
                 break;
 
             case (room.memory.harvest !== undefined && find('longDistanceHarvester',room.memory.harvest) == 0):
-                name = spawn.createLongDistanceHarvester(energy, 10, room.roomName, room.memory.harvest, 0);
+                name = spawn.createLongDistanceHarvester(energy, room.memory.harvest);
                 break;
 
             case (getCreepCount('upgrader') < room.memory.jobs.upgradeJobs):
@@ -137,9 +138,13 @@ module.exports =
                     filter: s => s.structureType == STRUCTURE_CONTAINER
                 });
 
-                if (containers.length && energy >= 550)
+                if (containers.length && energy >= 600)
                 {
-                    name = spawn.createMiner(source.id);
+                    name = spawn.createMiner(true, source.id);
+                }
+                else if (energy >= 550)
+                {
+                    name = spawn.createMiner(false, source.id);
                     if (room.memory.jobs.lorryJobs == 0)
                     {
                         room.memory.jobs.lorryJobs = 1;

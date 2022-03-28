@@ -187,11 +187,12 @@ module.exports =
         {
             spawnRole = creep.memory.role;
             if (spawnRole === undefined) {spawnRole = 'harvester';}
-
+            targetRoom = creep.memory.targetRoom;
+            if (targetRoom === undefined) {targetRoom = creep.pos.roomName;}
             creep.memory =
             {
                 homeRoom: creep.pos.roomName,
-                targetRoom: creep.pos.roomName,
+                targetRoom: targetRoom,
                 role: spawnRole,
                 job: null,
                 working: false,

@@ -207,7 +207,7 @@ module.exports =
         if (creep.memory.working === true) 
         {
             // if in home room
-            if (creep.room.name == creep.memory.home) 
+            if (creep.room.name == creep.memory.homeRoom) 
             {
                 // find closest spawn, extension or tower which is not full
                 var structure = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, 
@@ -261,7 +261,7 @@ module.exports =
             else 
             {
                 // find exit to home room
-                var exit = creep.room.findExitTo(creep.memory.home);
+                var exit = creep.room.findExitTo(creep.memory.homeRoom);
                 // and move to exit
                 creep.moveTo(creep.pos.findClosestByPath(exit));
             }
@@ -270,25 +270,14 @@ module.exports =
         else 
         {
             // if in target room
-            if (creep.room.name == creep.memory.target) 
+            if (creep.room.name === creep.memory.targetRoom) 
             {
-                // find source
-                var source = creep.room.find(FIND_SOURCES)[creep.memory.sourceIndex];
-
-                // try to harvest energy, if the source is not in range
-                if (creep.harvest(source) === ERR_NOT_IN_RANGE) 
-                {
-                    // move towards the source
-                    creep.moveTo(source);
-                }
+                subroutine.harvest(creep);
             }
             // if not in target room
             else 
             {
-                // find exit to target room
-                var exit = creep.room.findExitTo(creep.memory.target);
-                // move to exit
-                creep.moveTo(creep.pos.findClosestByPath(exit));
+                subroutine.moveToRoom(creep);
             }
         }
     },
@@ -351,12 +340,21 @@ module.exports =
             filter: s => s.structureType == STRUCTURE_CONTAINER
         })[0];
 
+        let link = container.pos.findInRange(FIND_STRUCTURES, 1,
+            {
+                filter: (s) => (s.structureType == STRUCTURE_LINK)
+            })[0];
+
         if (container == undefined)
         {
             creep.suicide()
         }
 
         // if creep is on top of the container
+        else if (link != undefined && link.store.getFreeCapacity(RESOURCE_ENERGY) > 0 && creep.carry.energy == creep.carryCapacity)
+        {
+            creep.transfer(link, RESOURCE_ENERGY);
+        }
         else if (creep.pos.isEqualTo(container.pos)) 
         {
             // harvest source
@@ -380,16 +378,16 @@ module.exports =
         }
         
         
-        if (creep.memory.extracting && creep.carryCapacity == _.sum(creep.carry)) 
+        if (creep.memory.working && creep.carryCapacity == _.sum(creep.carry)) 
         {
-            creep.memory.extracting = false;
+            creep.memory.working = false;
         }
-        if (!creep.memory.extracting && 0 == _.sum(creep.carry)) 
+        if (!creep.memory.working && 0 == _.sum(creep.carry)) 
         {
-            creep.memory.extracting = true;
+            creep.memory.working = true;
         }
         
-        if (creep.memory.extracting) 
+        if (creep.memory.working) 
         {
             subroutine.extract(creep);
         } 
@@ -399,7 +397,7 @@ module.exports =
                 if (creep.transfer(creep.room.terminal, creep.memory.mineralType) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(creep.room.terminal, {visualizePathStyle: {stroke:'orange', lineStyle:'dotted', opacity: .5}});
                 }
-            } 
+            }
             else if (creep.room.storage) 
             {
                 if (creep.transfer(creep.room.storage, creep.memory.mineralType) == ERR_NOT_IN_RANGE) 
@@ -424,13 +422,19 @@ module.exports =
                 filter: (s) => (s.structureType === STRUCTURE_SPAWN
                             || s.structureType === STRUCTURE_EXTENSION
                             || (s.structureType === STRUCTURE_TOWER && s.energy <= 700)
-                            || (s.structureType === STRUCTURE_LAB && s.energy <= 1700))
+                            || (s.structureType === STRUCTURE_LAB))
                             && s.energy < s.energyCapacity
             });
+
+            let factory = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {filter: (s) => (s.structureType === STRUCTURE_FACTORY)});
 
             if (structure == undefined && creep.room.terminal != undefined && creep.room.terminal.store[RESOURCE_ENERGY] < 20000)
             {
                 structure = creep.room.terminal;
+            }
+            else if (factory && factory.store[RESOURCE_ENERGY] < 5000)
+            {
+                structure = factory;
             }
             else if (structure == undefined && creep.room.storage != undefined && creep.room.storage.store[RESOURCE_ENERGY] < 750000) 
             {
@@ -455,6 +459,11 @@ module.exports =
         // if creep is supposed to get energy
         else 
         {
+            let storageLink = creep.room.storage.pos.findInRange(FIND_STRUCTURES, 5,
+                {
+                    filter: (s) => (s.structureType == STRUCTURE_LINK && s.store[RESOURCE_ENERGY] > 0)
+                })[0];
+            
             // find closest container
             let container = creep.pos.findClosestByPath(FIND_STRUCTURES, 
             {
@@ -466,8 +475,17 @@ module.exports =
                 container = creep.room.storage;
             }
 
+            if (storageLink != undefined)
+            {
+                if (creep.withdraw(storageLink, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) 
+                {
+                    // move towards it
+                    creep.moveTo(storageLink, {visualizePathStyle: {stroke:'yellow', lineStyle: 'dashed', opacity: .5}});
+                }
+            }
+
             // if one was found
-            if (container != undefined) 
+            else if (container != undefined) 
             {
                 // try to withdraw energy, if the container is not in range
                 if (creep.withdraw(container, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) 
@@ -475,7 +493,7 @@ module.exports =
                     // move towards it
                     creep.moveTo(container, {visualizePathStyle: {stroke:'yellow', lineStyle: 'dashed', opacity: .5}});
                 }
-            }
+            } 
         }
     },
 

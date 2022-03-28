@@ -154,4 +154,13 @@
     -- Added extractor path visuals
     -- Moved terminal energy checks into getFromStorage method
     -- Started fixing LD Harvesters
+
+    1.1.7 update Log
+    ================================
+    -- Miners will now spawn with a carry when possible
+        Miners will deposit into nearby links
+    -- Links working (kinda, turned off for now in room controller)
+    -- Lorries will withdraw from link near storage
+    -- Lorries will now fill labs and factory with some energy
+
 .

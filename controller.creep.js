@@ -8,7 +8,7 @@ module.exports =
     run: function(creep)
     {
         // Manage Working Creep Memory
-        if(creep.memory.working != undefined)
+        if(creep.memory.working != undefined && creep.memory.role != 'extractor')
         {
             data.creepMemory(creep);
         }
