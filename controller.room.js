@@ -47,7 +47,7 @@ module.exports =
         terminalLogic.run(room);
 
         //---------//   Link Control   //--------//
-        // linkLogic.run(room);
+        linkLogic.run(room);
 
         // ----- // DEFCON SYSTEM // ----- //
         // Check how bad it is and react accordingly

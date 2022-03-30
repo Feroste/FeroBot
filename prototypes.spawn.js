@@ -155,7 +155,7 @@ function (carry, sourceId)
 {
     if(carry)
     {
-        return this.createCreep([WORK,WORK,WORK,WORK,WORK,CARRY,MOVE],undefined, 
+        return this.createCreep([WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,MOVE],undefined, 
             {carry: carry, role: 'miner', sourceId: sourceId});
     }
     else

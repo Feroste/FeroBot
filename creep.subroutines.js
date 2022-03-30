@@ -181,6 +181,9 @@ module.exports =
                                     || (s.structureType === STRUCTURE_CONTAINER &&
                                     s.store[RESOURCE_ENERGY] >1000)
                     });
+
+
+                if (container == undefined) {throw 'No energy available';}
             }
         }
 
@@ -192,8 +195,6 @@ module.exports =
                 creep.moveTo(container, {visualizePathStyle: {stroke:'yellow', lineStyle: 'dashed', opacity: .5}});
             }
         }
-        else
-        {throw 'No energy available';}
     },
 
     // Will seek out construction sites and build them*^

@@ -13,7 +13,7 @@ module.exports =
             let source = room.find(FIND_SOURCES)[x];
             let sourceLink = source.pos.findInRange(FIND_STRUCTURES, 5,
                 {
-                    filter: (s) => (s.structureType == STRUCTURE_LINK && s.store[RESOURCE_ENERGY] > 0)
+                    filter: (s) => (s.structureType == STRUCTURE_LINK && s.store[RESOURCE_ENERGY] > 300)
                 })[0];
 
             if (sourceLink && storageLink && storageLink.store[RESOURCE_ENERGY] < sourceLink.store[RESOURCE_ENERGY])

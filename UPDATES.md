@@ -163,4 +163,11 @@
     -- Lorries will withdraw from link near storage
     -- Lorries will now fill labs and factory with some energy
 
+    1.1.8 update Log
+    ================================
+    -- Fixed a bug in getFromStorage subroutine
+    -- Improved Lorry behavior regarding containers link and storage
+    -- Links should be working now
+    -- Miners will pull excess energy out of containers to put into links
+
 .

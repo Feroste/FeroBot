@@ -138,7 +138,7 @@ module.exports =
                     filter: s => s.structureType == STRUCTURE_CONTAINER
                 });
 
-                if (containers.length && energy >= 600)
+                if (containers.length && energy >= 700)
                 {
                     name = spawn.createMiner(true, source.id);
                 }
