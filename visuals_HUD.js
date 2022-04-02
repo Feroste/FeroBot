@@ -1,7 +1,7 @@
 var flagCodes = require('flags');
 
 var fontSize;
-var style = {color: '#ffffff', align: 'left', opacity: 0.5};
+var style = {color: '#ffffff', align: 'left', opacity: 1};
 var fontScale = 1.3;
 var row = 0;
 var column = 0;
@@ -58,7 +58,7 @@ var HUD =
                          '',
                          '___________________________________________________________'];
         row = 0;
-        style.color = '#ffffff';
+        style.color = '#39ff14';
         row = new RoomVisual().multitext(asciiLogo, column, row, fontSize, style);
         row += 2 * fontSize;
     },
@@ -69,7 +69,7 @@ var HUD =
         style.font = fontSize + " Courier";
         // Display CPU Information
         new RoomVisual().text("CPU:" + " bucket:" + Game.cpu.bucket +
-                              " tickLimit:" + Game.cpu.tickLimit, column, row, style);
+                              " tickLimit:" + Game.cpu.tickLimit + " tick:" + Game.time, column, row, style);
         row += fontSize;
     },
 
@@ -86,8 +86,15 @@ var HUD =
             let room = ownedRooms[i];
             let progressPercent = Math.round(100 * room.controller.progress / room.controller.progressTotal) + "%";
             let info = "";
-            info += "Ctrl: " + progressPercent + " ";
-            if (room.storage) 
+            if (progressPercent != 'NaN%')
+            {
+                info += "Ctrl: " + progressPercent + " ";
+            }
+            if (room.storage && room.terminal)
+            {
+                info += "Energy: " + Math.floor((room.storage.store[RESOURCE_ENERGY] + room.terminal.store[RESOURCE_ENERGY]) / 1000) + "K "
+            }
+            else if (room.storage)
             {
                 info += "Energy: " + Math.floor(room.storage.store[RESOURCE_ENERGY] / 1000) + "K "
             }
@@ -163,7 +170,7 @@ var HUD =
     {
         this.verifyMemory();
         this.drawLogo();
-        this.drawCpuInfo();
+        // this.drawCpuInfo();
         // Don't display at expense of CPU
         fontSize = 0.5 * fontScale;
         style.font = fontSize + " Courier";

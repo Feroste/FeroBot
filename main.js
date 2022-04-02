@@ -37,8 +37,6 @@ const visuals = require('visuals');
     if (Game.time % 50 == 0 && Memory.Interface.Visualizations.Logs === true)
     {
         console.log('// --- Status Report --- //');
-
-        console.log(`Bucketed CPU: ${Game.cpu.bucket}`);
         console.log(`Game Tick: ${Game.time}`);
             // if 10,000 cpu, make a pixel
             if (Game.cpu.bucket < 10000)

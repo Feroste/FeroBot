@@ -119,6 +119,51 @@ module.exports =
         }
     },
 
+    // Will transfer any resource creep is carrying [WIP]
+    storeResource: function(creep, arg)
+    {
+        switch(true)
+        {
+            case (creep.store[RESOURCE_ENERGY] > 0):
+                creep.transfer(arg, RESOURCE_ENERGY);
+                break;
+            case (creep.store[RESOURCE_POWER] > 0):
+                creep.transfer(arg, RESOURCE_POWER);
+                break;
+
+
+            case (creep.store[RESOURCE_HYDROGEN] > 0):
+                creep.transfer(arg, RESOURCE_HYDROGEN);
+                break;
+            case (creep.store[RESOURCE_OXYGEN] > 0):
+                creep.transfer(arg, RESOURCE_OXYGEN);
+                break;
+            case (creep.store[RESOURCE_UTRIUM] > 0):
+                creep.transfer(arg, RESOURCE_UTRIUM);
+                break;
+            case (creep.store[RESOURCE_LEMERGIUM] > 0):
+                creep.transfer(arg, RESOURCE_LEMERGIUM);
+                break;
+            case (creep.store[RESOURCE_KEANIUM] > 0):
+                creep.transfer(arg, RESOURCE_KEANIUM);
+                break;
+            case (creep.store[RESOURCE_ZYNTHIUM] > 0):
+                creep.transfer(arg, RESOURCE_ZYNTHIUM);
+                break;
+            case (creep.store[RESOURCE_CATALYST] > 0):
+                creep.transfer(arg, RESOURCE_CATALYST);
+                break;      
+            case (creep.store[RESOURCE_GHODIUM] > 0):
+                creep.transfer(arg, RESOURCE_GHODIUM);
+                break;
+                
+                
+                //.........
+                
+                
+        }
+    },
+
     // Will extract minerals by deposit ID*^
     extract: function(creep, arg)
     {
@@ -402,10 +447,10 @@ module.exports =
             let enemyspawn = creep.room.find(FIND_HOSTILE_SPAWNS);
             let hostiles = creep.room.find(FIND_HOSTILE_CREEPS);
 
-            var target = creep.pos.findClosestByPath(hostiles);
+            var target = creep.pos.findClosestByRange(hostiles);
             if(!target)
             {
-                var target = creep.pos.findClosestByPath(enemyspawn);
+                var target = creep.pos.findClosestByRange(enemyspawn);
             }
         }
 
@@ -416,6 +461,27 @@ module.exports =
         if (creep.attack(target) === ERR_NOT_IN_RANGE) 
         {
             console.log(creep.moveTo(target));
+        }
+    },
+
+    rangedAttack: function(creep, arg)
+    {
+        if (arg)
+        {
+            var target = Game.getObjectById(arg)
+        }
+
+        else
+        {
+            var hostiles = creep.find(FIND_HOSTILE_CREEPS);
+            var targets = creep.pos.findInRange(FIND_HOSTILE_CREEPS, 3);
+            if(targets.length > 0) {
+                creep.rangedAttack(targets[0]);
+            }
+            else if (hostiles)
+            {
+                creep.moveTo(creep.pos.findClosestByRange(hostiles));
+            }
         }
     },
 

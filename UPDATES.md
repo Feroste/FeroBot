@@ -170,4 +170,13 @@
     -- Links should be working now
     -- Miners will pull excess energy out of containers to put into links
 
+    1.1.9 update Log
+    ================================
+    -- Added a storeResource routine to deal with multiple resource types
+    -- Squashed stupid DEFCON bug, needs redoing anyway
+    -- Optimized attack routine? Added rangedAttack back
+    -- Added helper creeps for new claims etc., not tested yet
+    -- Added a timer to auto attack owned room controllers, claim, and then help
+        Will spawn bigger claimers for owned rooms
+
 .

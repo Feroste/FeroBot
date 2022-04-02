@@ -1,6 +1,6 @@
 // create a new function for StructureSpawn
 StructureSpawn.prototype.createCustomCreep =
-function(energy, roleName) 
+function(energy, roleName, target) 
 {
     // create a balanced body as big as possible with the given energy
     var numberOfParts = Math.floor(energy / 200);
@@ -19,7 +19,7 @@ function(energy, roleName)
     }
 
     // create creep with the created body and the given role
-    return this.createCreep(body, undefined, { role: roleName, working: false });
+    return this.createCreep(body, undefined, { role: roleName, working: false, targetRoom: target});
 };
 
 // Long Distance Harvester
@@ -61,7 +61,12 @@ function (target, order)
         return this.createCreep([MOVE,CLAIM],undefined, 
                                 {role: 'claimer', targetRoom: target, order: order});
     }
-    if (order == -1)
+    else if(order == 2)
+    {
+        return this.createCreep([MOVE,CLAIM,MOVE,CLAIM,MOVE,CLAIM,MOVE,CLAIM,MOVE,CLAIM],undefined, 
+            {role: 'claimer', targetRoom: target, order: 1});
+    }
+    else if (order == -1)
     {
         return this.createCreep([MOVE,CLAIM,MOVE,CLAIM], undefined,
                                 {role: 'claimer', targetRoom: target, order: order});
@@ -99,12 +104,12 @@ function (energy, target)
     });
 };
 
-// RANGED ATTACKER
+// RANGED ATTACKER 1100 energy
 StructureSpawn.prototype.createRangedAttacker =
-function ()
+function (energy, target)
 {
-    return this.createCreep([TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,MOVE,MOVE,MOVE, RANGED_ATTACK, MOVE, RANGED_ATTACK,MOVE, RANGED_ATTACK,MOVE, RANGED_ATTACK,MOVE], undefined, 
-                            {role: 'rangedAttacker'});
+    return this.createCreep([TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,MOVE,MOVE,MOVE,MOVE,MOVE, RANGED_ATTACK, MOVE, RANGED_ATTACK,MOVE, RANGED_ATTACK,MOVE, RANGED_ATTACK,MOVE], undefined, 
+                            {role: 'rangedAttacker', targetRoom: target});
 };
 
 // HEALER

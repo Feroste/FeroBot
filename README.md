@@ -23,7 +23,7 @@
     - Progressive body building
     - DEFCON system
     - Easy Claim
-    - Light Energy Economy
+    - Light Energy Economy (Storage, links, terminal)
     - Path visuals and HUD
     ================================================================================
     --------------------------------------------------------------------------------

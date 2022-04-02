@@ -79,7 +79,7 @@ module.exports =
                 name = spawn.createLorry(450);
                 break;
 
-            case (flags.attackFlag && find('attacker', flags.attackFlag.pos.roomName) < 3 
+            case (flags.attackFlag && find('attacker', flags.attackFlag.pos.roomName) < 1 
             && Game.map.getRoomLinearDistance(room.name, flags.attackFlag.pos.roomName) <= 8):
                 name = spawn.createAttacker(hardCap, flags.attackFlag.pos.roomName);
                 break;
@@ -109,7 +109,14 @@ module.exports =
                 break;
 
             case (room.memory.claim !== undefined):
-                name = spawn.createClaimer(room.memory.claim, 1);
+                if(Game.rooms[room.memory.claim].controller.owner != undefined && room.energyCapacityAvailable > 5000)
+                {
+                    name = spawn.createClaimer(room.memory.claim, 2);
+                }
+                else
+                {
+                    name = spawn.createClaimer(room.memory.claim, 1);
+                }
                 if (!(name < 0)) 
                 {
                     delete room.memory.claim;

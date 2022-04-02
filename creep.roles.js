@@ -285,7 +285,7 @@ module.exports =
     attacker: function(creep)
     {
         // Target is assigned in creep memory
-        var target = creep.memory.target;
+        var target = creep.memory.targetRoom;
 
         // Defender
         if (target == -1)
@@ -308,7 +308,7 @@ module.exports =
         else
         {
             // if not in target room
-            if (creep.memory.target != undefined && creep.room.name != creep.memory.target) 
+            if (target != undefined && creep.room.name != target) 
             {
                 // move towards it
                 subroutine.moveToRoom(creep);
@@ -320,6 +320,42 @@ module.exports =
                 try
                 {                
                     subroutine.attack(creep);
+                }
+                catch(e)
+                {
+                    creep.moveTo(room.controller);
+                }
+            }
+        }
+    },
+
+    rangedAttacker: function(creep)
+    {
+        // Target is assigned in creep memory
+        var target = creep.memory.targetRoom;
+
+        // Defender
+        if (target == -1)
+        {
+            subroutine.rangedAttack(creep);
+        }
+
+        // Attacker
+        else
+        {
+            // if not in target room
+            if (target != undefined && creep.room.name != target) 
+            {
+                // move towards it
+                subroutine.moveToRoom(creep);
+            }
+
+            // If in the right room
+            else
+            {
+                try
+                {                
+                    subroutine.rangedAttack(creep);
                 }
                 catch(e)
                 {

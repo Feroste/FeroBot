@@ -111,7 +111,49 @@ module.exports =
                 break;
         }
 
+        // HELP HARVESTERS (THIS NEEDS TO BE MOVED)
+        function helpCreeps()
+        {
+            return _.sum(Game.creeps, c => c.memory.targetRoom != room.name && c.memory.role == 'harvester');
+        }
+        if(room.memory.claim) room.memory.help = room.memory.claim;
+        if(room.memory.help)
+        {
+            if (Game.rooms[room.memory.help] === undefined || !Game.rooms[room.memory.help].controller.my)
+            {
+                if(room.memory.claimTicks != undefined) 
+                {
+                    room.memory.claimTicks += 1;
+                }
+                else 
+                {
+                    room.memory.claimTicks = 0;
+                }
 
+                if(room.memory.claimTicks % 1000 == 0)
+                {
+                    room.memory.claim = room.memory.help;
+                }
+            }
+
+            else
+            {
+                if(!room.memory.helpTicks) room.memory.helpTicks = 0;
+                else if(room.memory.helpTicks > 10000 || !room.memory.help) 
+                {
+                    delete room.memory.help;
+                    delete room.memory.helpTicks;
+                    delete room.memory.claimTicks;
+                }
+                else room.memory.helpTicks += 1;
+    
+                if(helpCreeps() < 3)
+                {
+                    let roomSpawns = room.find(FIND_MY_STRUCTURES, { filter: (s) => s.structureType == STRUCTURE_SPAWN});
+                    roomSpawns[0].createCustomCreep(2000, 'harvester', room.memory.help);
+                }
+            }
+        }
     },
 
     // Defcon function
@@ -126,8 +168,8 @@ module.exports =
 
         switch(true)
         {
-            // DEFCON 3 - 5+ hostiles or L2 for 1000 ticks
-            case (enemies.length > 4 || room.memory.defcon.combatTicks > 1000):
+            // DEFCON 3 - 5+ hostiles
+            case (enemies.length > 4):
                 // Spawn 2 more defenders
                 room.memory.defcon.defenders = 4;
                 room.memory.defcon.level = 3;
@@ -136,8 +178,8 @@ module.exports =
                 room.memory.defcon.combatTicks += 1;
             break;
 
-            // DEFCON 2 - 3+ hostiles or L1 for 300 ticks
-            case (enemies.length > 2 || room.memory.defcon.combatTicks > 300):
+            // DEFCON 2 - 3+ hostiles
+            case (enemies.length > 2):
                 // Spawn 1 more defender
                 room.memory.defcon.defenders = 2;
                 room.memory.defcon.level = 2;

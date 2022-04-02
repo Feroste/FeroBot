@@ -59,6 +59,10 @@ module.exports =
                         roles.attacker(creep);
                         break;
                         
+                    case 'rangedAttacker':
+                        roles.rangedAttacker(creep);
+                        break;
+                         
                     case 'miner':
                         roles.miner(creep);
                         break;
