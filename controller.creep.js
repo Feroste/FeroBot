@@ -70,6 +70,10 @@ module.exports =
                     case 'extractor':
                         roles.extractor(creep);
                         break;
+
+                    case 'scientist':
+                        roles.scientist(creep);
+                        break;
                         
                     case 'lorry':
                         roles.lorry(creep);

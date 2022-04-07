@@ -621,8 +621,8 @@ module.exports =
         if (!exit)
         {throw 'No Exit found';}
 
-        // move to exit
-        creep.moveTo(creep.pos.findClosestByPath(exit));
+        // move to exit                                 SWAMP COST HOTFIX
+        creep.moveTo(creep.pos.findClosestByPath(exit), {visualizePathStyle: {stroke:'white', lineStyle: 'dotted', opacity: .5},plainCost: 5, swampCost: 5});
     },
 
     // Check to see how much energy creep has, if the creep should switch working states*

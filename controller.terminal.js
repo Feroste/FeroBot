@@ -16,14 +16,37 @@ module.exports =
 
         else if (room.terminal && Game.time % 20 == 0)
         {
+            // BUY EXCESS ENERGY IN BATCHES
+            if (room.storage.store[RESOURCE_ENERGY] < 50000)
+            {
+                let orders = Game.market.getAllOrders(order => order.resourceType == RESOURCE_ENERGY &&
+                                                    order.type == ORDER_SELL &&
+                                                    Game.market.calcTransactionCost(5000, room.name, order.roomName) < 3000);
+                console.log('--------------------------');
+                console.log('Energy SELL orders found: ' + orders.length);
+                if (orders.length)
+                {
+                    orders.sort(function(a,b){return b.price - a.price});
+                    console.log('Best price: ' + orders[0].price);
+                    if (orders[0].price > 0.19)
+                    {
+                        let result = Game.market.deal(orders[0].id, 5000, room.name);
+                        if (result == 0)
+                        {
+                            console.log('Order completed successfully');
+                        }
+                    }
+                }
+                console.log('--------------------------');
+            }
             // SELL EXCESS ENERGY IN BATCHES
-            if (room.terminal.store[RESOURCE_ENERGY] > 50000)
+            else if (room.storage.store[RESOURCE_ENERGY] > 500000 && room.terminal.store[RESOURCE_ENERGY] > 50000)
             {
                 let orders = Game.market.getAllOrders(order => order.resourceType == RESOURCE_ENERGY &&
                                                     order.type == ORDER_BUY &&
                                                     Game.market.calcTransactionCost(5000, room.name, order.roomName) < 3000);
                 console.log('--------------------------');
-                console.log('Energy buy orders found: ' + orders.length);
+                console.log('Energy BUY orders found: ' + orders.length);
                 if (orders.length)
                 {
                     orders.sort(function(a,b){return b.price - a.price});

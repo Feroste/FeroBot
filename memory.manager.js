@@ -36,7 +36,7 @@ module.exports =
         }
     },
 
-    // Room Memory Template
+    // Room Memory Manager
     roomMemory: function(room)
     {
         // Initialize room variables
@@ -58,7 +58,8 @@ module.exports =
                     upgradeJobs: 1,
                     lorryJobs: 0,
                     wallRepairJobs: 0,
-                    scientistJobs: 0,
+                    extractorJobs: 0,
+                    scientistJobs: 0
                 },
                 sources: room.find(FIND_SOURCES),
                 energyLimit: 1000,
@@ -111,16 +112,21 @@ module.exports =
                 break;
         }
 
-        // HELP HARVESTERS (THIS NEEDS TO BE MOVED)
+        // HELP HARVESTERS FUNCTION (THIS NEEDS TO BE MOVED)
         function helpCreeps()
         {
-            return _.sum(Game.creeps, c => c.memory.targetRoom != room.name && c.memory.role == 'harvester');
+            return _.sum(Game.creeps, c => c.memory.targetRoom == room.memory.help && c.memory.role == 'harvester');
         }
+
+        // Add a help order to any claim order
         if(room.memory.claim) room.memory.help = room.memory.claim;
+        // Help Room
         if(room.memory.help)
         {
+            // help memory stays, if room is not owned then claim ticks will go up and keep sending claim orders
             if (Game.rooms[room.memory.help] === undefined || !Game.rooms[room.memory.help].controller.my)
             {
+                // Set/Increment claim ticks
                 if(room.memory.claimTicks != undefined) 
                 {
                     room.memory.claimTicks += 1;
@@ -129,24 +135,32 @@ module.exports =
                 {
                     room.memory.claimTicks = 0;
                 }
-
+                // Claim order every 1000 ticks
                 if(room.memory.claimTicks % 1000 == 0)
                 {
                     room.memory.claim = room.memory.help;
                 }
             }
-
+            // Help room
             else
             {
-                if(!room.memory.helpTicks) room.memory.helpTicks = 0;
-                else if(room.memory.helpTicks > 10000 || !room.memory.help) 
+                // Set/Increment help ticks, help for 10,000 ticks, delete all help memory
+                if(room.memory.helpTicks > 10000) 
                 {
                     delete room.memory.help;
                     delete room.memory.helpTicks;
                     delete room.memory.claimTicks;
                 }
-                else room.memory.helpTicks += 1;
-    
+                else if(room.memory.helpTicks != undefined) 
+                {
+                    room.memory.helpTicks += 1;
+                }
+
+                else 
+                {
+                    room.memory.helpTicks = 0;
+                }
+                // Special spawn harvesters
                 if(helpCreeps() < 3)
                 {
                     let roomSpawns = room.find(FIND_MY_STRUCTURES, { filter: (s) => s.structureType == STRUCTURE_SPAWN});
@@ -218,7 +232,7 @@ module.exports =
         }
     },
 
-    // Creep Memory Template
+    // Creep Memory Manager
     creepMemory: function(creep)
     {
         // Check working

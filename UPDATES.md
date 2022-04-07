@@ -179,4 +179,15 @@
     -- Added a timer to auto attack owned room controllers, claim, and then help
         Will spawn bigger claimers for owned rooms
 
+    1.2.0 update Log
+    ===============================
+    -- Will buy energy when low
+    -- Lorries will pull from terminal when appropriate
+    -- New Room bug squash + random hotfixes
+    -- Lorries fill Nuker and Power Spawn with energy
+    -- Claim room working amazingly, will keep sending claimers to attack, claim, sign, 
+        and then send 3 helpers for 10,000 ticks
+    -- Power Spawns now process power
+    -- Scientist role brings power from terminal/storage to powerSpawn
+
 .

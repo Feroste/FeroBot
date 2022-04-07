@@ -38,7 +38,6 @@ module.exports =
 
         // Multiple Spawns
         // Check if Spawning, Wait a tick
-
         let roomSpawns = room.find(FIND_MY_STRUCTURES, { filter: (s) => s.structureType == STRUCTURE_SPAWN});
             if (spawn.spawning && roomSpawns.length > 1)
             {
@@ -76,7 +75,7 @@ module.exports =
                 break;
 
             case (getCreepCount('lorry') < room.memory.jobs.lorryJobs):
-                name = spawn.createLorry(450);
+                name = spawn.createLorry(energy);
                 break;
 
             case (flags.attackFlag && find('attacker', flags.attackFlag.pos.roomName) < 1 
@@ -104,12 +103,16 @@ module.exports =
                 name = spawn.createCustomCreep(energy, 'wallRepairer');
                 break;
     
-            case (getCreepCount('extractor') < room.memory.jobs.scientistJobs):
+            case (getCreepCount('extractor') < room.memory.jobs.extractorJobs):
                 name = spawn.createExtractor();
                 break;
 
+            case (getCreepCount('scientist') < room.memory.jobs.scientistJobs):
+                name = spawn.createScientist(300);
+                break;
+
             case (room.memory.claim !== undefined):
-                if(Game.rooms[room.memory.claim].controller.owner != undefined && room.energyCapacityAvailable > 5000)
+                if(room.energyCapacityAvailable > 5000 && Game.rooms[room.memory.claim].controller.owner != undefined)
                 {
                     name = spawn.createClaimer(room.memory.claim, 2);
                 }
@@ -123,11 +126,8 @@ module.exports =
                 }
                 break;
 
-            case (room.memory.reserve !== undefined):
-                if (find('claimer', room.memory.reserve) < 1)
-                {
-                    name = spawn.createClaimer(room.memory.reserve, -1);
-                }
+            case (room.memory.reserve !== undefined && (find('claimer', room.memory.reserve) < 1)):
+                name = spawn.createClaimer(room.memory.reserve, -1);
                 break;
 
             default:
@@ -166,11 +166,11 @@ module.exports =
         
         if(room.energyCapacityAvailable > 1900 && extractor && room.find(FIND_MINERALS)[0].mineralAmount > 0)
         {
-            room.memory.jobs.scientistJobs = 1;
+            room.memory.jobs.extractorJobs = 1;
         }
         else
         {
-            room.memory.jobs.scientistJobs = 0;
+            room.memory.jobs.extractorJobs = 0;
         }
 
 

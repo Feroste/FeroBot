@@ -49,6 +49,10 @@ module.exports =
         //---------//   Link Control   //--------//
         linkLogic.run(room);
 
+        //-------// Power Spawn //-------//
+        let powerSpawn = room.find(FIND_MY_STRUCTURES, {filter: (s) => s.structureType == STRUCTURE_POWER_SPAWN})[0];
+        if(powerSpawn) {powerSpawn.processPower();}
+
         // ----- // DEFCON SYSTEM // ----- //
         // Check how bad it is and react accordingly
         data.checkDefcon(room);
