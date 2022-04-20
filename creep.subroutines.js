@@ -81,7 +81,7 @@ module.exports =
         if (creep.harvest(source) === ERR_NOT_IN_RANGE) 
         {
             // if not in range, move towards the source
-            creep.moveTo(source, {visualizePathStyle: {stroke:'yellow', lineStyle: 'dashed', opacity: .5}});    
+            creep.moveTo(source, {visualizePathStyle: {stroke:'yellow', lineStyle: 'dashed', opacity: .5}, range: 1, reusePath: 10});    
         }
     },
 
@@ -115,7 +115,7 @@ module.exports =
         if (creep.transfer(structure, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) 
         {
             // move towards it
-            creep.moveTo(structure, {visualizePathStyle: {stroke:'yellow', lineStyle: 'solid', opacity: .5}});
+            creep.moveTo(structure, {visualizePathStyle: {stroke:'yellow', lineStyle: 'solid', opacity: .5}, range: 1,  reusePath: 10});
         }
     },
 
@@ -125,36 +125,66 @@ module.exports =
         switch(true)
         {
             case (creep.store[RESOURCE_ENERGY] > 0):
-                creep.transfer(arg, RESOURCE_ENERGY);
+                if(creep.transfer(arg, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE)
+                {
+                    creep.moveTo(arg);
+                }
                 break;
             case (creep.store[RESOURCE_POWER] > 0):
-                creep.transfer(arg, RESOURCE_POWER);
+                if(creep.transfer(arg, RESOURCE_POWER) === ERR_NOT_IN_RANGE)
+                {
+                    creep.moveTo(arg);
+                }
                 break;
 
 
             case (creep.store[RESOURCE_HYDROGEN] > 0):
-                creep.transfer(arg, RESOURCE_HYDROGEN);
+                if(creep.transfer(arg, RESOURCE_HYDROGEN) === ERR_NOT_IN_RANGE)
+                {
+                    creep.moveTo(arg);
+                }
                 break;
             case (creep.store[RESOURCE_OXYGEN] > 0):
-                creep.transfer(arg, RESOURCE_OXYGEN);
+                if(creep.transfer(arg, RESOURCE_OXYGEN) === ERR_NOT_IN_RANGE)
+                {
+                    creep.moveTo(arg);
+                }
                 break;
             case (creep.store[RESOURCE_UTRIUM] > 0):
-                creep.transfer(arg, RESOURCE_UTRIUM);
+                if(creep.transfer(arg, RESOURCE_UTRIUM) === ERR_NOT_IN_RANGE)
+                {
+                    creep.moveTo(arg);
+                }
                 break;
             case (creep.store[RESOURCE_LEMERGIUM] > 0):
-                creep.transfer(arg, RESOURCE_LEMERGIUM);
+                if(creep.transfer(arg, RESOURCE_LEMERGIUM) === ERR_NOT_IN_RANGE)
+                {
+                    creep.moveTo(arg);
+                }
                 break;
             case (creep.store[RESOURCE_KEANIUM] > 0):
-                creep.transfer(arg, RESOURCE_KEANIUM);
+                if(creep.transfer(arg, RESOURCE_KEANIUM) === ERR_NOT_IN_RANGE)
+                {
+                    creep.moveTo(arg);
+                }
                 break;
             case (creep.store[RESOURCE_ZYNTHIUM] > 0):
-                creep.transfer(arg, RESOURCE_ZYNTHIUM);
+                if(creep.transfer(arg, RESOURCE_ZYNTHIUM) === ERR_NOT_IN_RANGE)
+                {
+                    creep.moveTo(arg);
+                }
                 break;
             case (creep.store[RESOURCE_CATALYST] > 0):
-                creep.transfer(arg, RESOURCE_CATALYST);
+                if(creep.transfer(arg, RESOURCE_CATALYST) === ERR_NOT_IN_RANGE)
+                {
+                    creep.moveTo(arg);
+                }
                 break;      
             case (creep.store[RESOURCE_GHODIUM] > 0):
-                creep.transfer(arg, RESOURCE_GHODIUM);
+                if(creep.transfer(arg, RESOURCE_GHODIUM) === ERR_NOT_IN_RANGE)
+                {
+                    creep.moveTo(arg);
+                }
                 break;
                 
                 
@@ -214,7 +244,7 @@ module.exports =
             {
                 if (creep.withdraw(creep.room.terminal, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE)
                 {
-                    creep.moveTo(creep.room.terminal, {visualizePathStyle: {stroke:'yellow', lineStyle: 'dashed', opacity: .5}});
+                    creep.moveTo(creep.room.terminal, {visualizePathStyle: {stroke:'yellow', lineStyle: 'dashed', opacity: .5}, range: 1,  reusePath: 10});
                 } 
             }
             else
@@ -237,7 +267,7 @@ module.exports =
         {
             if (creep.withdraw(container, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE)
             {
-                creep.moveTo(container, {visualizePathStyle: {stroke:'yellow', lineStyle: 'dashed', opacity: .5}});
+                creep.moveTo(container, {visualizePathStyle: {stroke:'yellow', lineStyle: 'dashed', opacity: .5}, range: 1,  reusePath: 10});
             }
         }
     },
@@ -264,7 +294,7 @@ module.exports =
         if (creep.build(constructionSite) === ERR_NOT_IN_RANGE) 
         {
             // move towards the constructionSite
-            creep.moveTo(constructionSite, {visualizePathStyle: {stroke:'green', lineStyle: 'solid', opacity: .5}});
+            creep.moveTo(constructionSite, {visualizePathStyle: {stroke:'green', lineStyle: 'solid', opacity: .5}, range: 3,  reusePath: 10});
         }
     },
 
@@ -279,7 +309,7 @@ module.exports =
         if (creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) 
         {
             // if not in range, move towards the controller
-            creep.moveTo(creep.room.controller, {visualizePathStyle: {stroke:'red', lineStyle: 'solid', opacity: .5}});
+            creep.moveTo(creep.room.controller, {visualizePathStyle: {stroke:'red', lineStyle: 'solid', opacity: .5}, range: 3,  reusePath: 10});
         }
     },
 
@@ -597,6 +627,17 @@ module.exports =
     move: function(creep, target, arg)
     {
 
+        switch(creep.memory.role)
+        {
+            case 'harvester':
+                creep.moveTo(target);
+                break;
+
+            default:
+                creep.moveTo(target);
+                break;
+        }
+
     },
 
     // Will move to whatever room is designated in creep.memory.target*^
@@ -622,7 +663,7 @@ module.exports =
         {throw 'No Exit found';}
 
         // move to exit                                 SWAMP COST HOTFIX
-        creep.moveTo(creep.pos.findClosestByPath(exit), {visualizePathStyle: {stroke:'white', lineStyle: 'dotted', opacity: .5},plainCost: 5, swampCost: 5});
+        creep.moveTo(creep.pos.findClosestByPath(exit), {visualizePathStyle: {stroke:'white', lineStyle: 'dotted', opacity: .5}, reusePath: 50, plainCost: 5, swampCost: 5});
     },
 
     // Check to see how much energy creep has, if the creep should switch working states*

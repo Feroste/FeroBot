@@ -51,7 +51,14 @@ module.exports =
 
         //-------// Power Spawn //-------//
         let powerSpawn = room.find(FIND_MY_STRUCTURES, {filter: (s) => s.structureType == STRUCTURE_POWER_SPAWN})[0];
-        if(powerSpawn) {powerSpawn.processPower();}
+        if(powerSpawn) 
+        {
+            if(!(Game.powerCreeps['Shyft'].spawnCooldownTime > Date.now())) {
+                Game.powerCreeps['Shyft'].spawn(powerSpawn);
+            }
+
+            powerSpawn.processPower();
+        }
 
         // ----- // DEFCON SYSTEM // ----- //
         // Check how bad it is and react accordingly

@@ -1,7 +1,7 @@
 # Screeps
 
     Make sure to add your rooms and 'Interface' to memory watch paths so you can edit creep numbers, energy limit, and issue commands, etc.
-        ex. rooms.N11E22
+        ex. Rooms
         ex. Interface
 
     'attackFlag' = sends a number of melee attackers to the room

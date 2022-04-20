@@ -190,4 +190,10 @@
     -- Power Spawns now process power
     -- Scientist role brings power from terminal/storage to powerSpawn
 
+    1.2.1 update Log
+    ===============================
+    -- Housekeeping
+    -- Various Bug Fixes
+    -- Simple power creep routine
+
 .

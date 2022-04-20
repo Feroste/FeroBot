@@ -23,6 +23,9 @@ const visuals = require('visuals');
         let creep = Game.creeps[name];  
         screepLogic.run(creep);
     }
+    // Power Creep
+    let shyft = Game.powerCreeps['Shyft'];
+    screepLogic.powerCreep(shyft);
 
                /////----- Room Logic -----//////
     

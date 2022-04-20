@@ -7,16 +7,6 @@ module.exports =
         // Find room
         let room = Game.rooms[spawn.room.name];
 
-                    //---- Find the number of Creeps Alive ----//
-        function getCreepCount(role)
-        {
-            return _.sum(Game.creeps, c => c.pos.roomName == room.name && c.memory.role == role);
-        }
-        function find(role, target)
-        {
-            return _.sum(Game.creeps, c => c.memory.targetRoom == target && c.memory.role == role);
-        }
-
         // energy cap
         let energy = room.energyCapacityAvailable;
         // Hard cap for spawning military [2000]
@@ -44,9 +34,16 @@ module.exports =
                 // If more than 1 spawn and its spawning, increase the queue
                 room.memory.queue += 1;
             }
-                
-        // creep name
-        let name = undefined;
+
+        //---- Functions to count creeps ----//
+        function getCreepCount(role)
+        {
+            return _.sum(Game.creeps, c => c.pos.roomName == room.name && c.memory.role == role);
+        }
+        function find(role, target)
+        {
+            return _.sum(Game.creeps, c => c.memory.targetRoom == target && c.memory.role == role);
+        }
 
         // PRIMARY SPAWN PRIORITY
         switch(true)
@@ -65,52 +62,52 @@ module.exports =
                     name = spawn.createCustomCreep(room.energyAvailable, 'harvester');
                 }
                 break;
-
+            // Defenders
             case (getCreepCount('attacker') < room.memory.defcon.defenders):
                 name = spawn.createAttacker(hardCap, -1);
                 break;
-
+            // Harvesters
             case (getCreepCount('harvester') < room.memory.jobs.storeJobs):
                 name = spawn.createCustomCreep(energy, 'harvester');
                 break;
-
+            // Lorry
             case (getCreepCount('lorry') < room.memory.jobs.lorryJobs):
                 name = spawn.createLorry(energy);
                 break;
-
+            // Flag Attackers
             case (flags.attackFlag && find('attacker', flags.attackFlag.pos.roomName) < 1 
             && Game.map.getRoomLinearDistance(room.name, flags.attackFlag.pos.roomName) <= 8):
                 name = spawn.createAttacker(hardCap, flags.attackFlag.pos.roomName);
                 break;
-
+            // Long Distance Harvesters
             case (room.memory.harvest !== undefined && find('longDistanceHarvester',room.memory.harvest) == 0):
                 name = spawn.createLongDistanceHarvester(energy, room.memory.harvest);
                 break;
-
+            // Upgrader
             case (getCreepCount('upgrader') < room.memory.jobs.upgradeJobs):
                 name = spawn.createCustomCreep(energy, 'upgrader');
                 break;
-
+            // Builder
             case (getCreepCount('builder') < room.memory.jobs.buildJobs):
                 name = spawn.createCustomCreep(energy, 'builder');
                 break;
-
+            // Repairer
             case (getCreepCount('repairer') < room.memory.jobs.repairJobs):
                 name = spawn.createCustomCreep(energy, 'repairer');
                 break;
-
+            // Wall Repairer
             case (getCreepCount('wallRepairer') < room.memory.jobs.wallRepairJobs):
                 name = spawn.createCustomCreep(energy, 'wallRepairer');
                 break;
-    
+            // Extractor
             case (getCreepCount('extractor') < room.memory.jobs.extractorJobs):
                 name = spawn.createExtractor();
                 break;
-
+            // Scientist
             case (getCreepCount('scientist') < room.memory.jobs.scientistJobs):
                 name = spawn.createScientist(300);
                 break;
-
+            // Claimer
             case (room.memory.claim !== undefined):
                 if(room.energyCapacityAvailable > 5000 && Game.rooms[room.memory.claim].controller.owner != undefined)
                 {
@@ -125,7 +122,7 @@ module.exports =
                     delete room.memory.claim;
                 }
                 break;
-
+            // Reserver
             case (room.memory.reserve !== undefined && (find('claimer', room.memory.reserve) < 1)):
                 name = spawn.createClaimer(room.memory.reserve, -1);
                 break;
@@ -134,6 +131,7 @@ module.exports =
                 name = -1;
                 break;
         }
+
         // SET A MINER FOR EACH SOURCE WITH A CONTAINER
         let sources = room.find(FIND_SOURCES);
         for (let source of sources)
@@ -145,10 +143,12 @@ module.exports =
                     filter: s => s.structureType == STRUCTURE_CONTAINER
                 });
 
+                // Spawn With a carry
                 if (containers.length && energy >= 700)
                 {
                     name = spawn.createMiner(true, source.id);
                 }
+                // Else don't, and add a lorry
                 else if (energy >= 550)
                 {
                     name = spawn.createMiner(false, source.id);
@@ -159,20 +159,6 @@ module.exports =
                 }
             }
         }
-
-        // AUTOMATICALLY HANDLE EXTRACTING
-        // let mineral = room.find(FIND_MINERALS[0]);
-        let extractor = room.find(FIND_MY_STRUCTURES, {filter: (s) => (s.structureType === STRUCTURE_EXTRACTOR)});
-        
-        if(room.energyCapacityAvailable > 1900 && extractor && room.find(FIND_MINERALS)[0].mineralAmount > 0)
-        {
-            room.memory.jobs.extractorJobs = 1;
-        }
-        else
-        {
-            room.memory.jobs.extractorJobs = 0;
-        }
-
 
             // ----- // PRINT SPAWN LOG // ----- //
         if (!(name < 0) && Memory.Interface.Visualizations.Logs === true) 

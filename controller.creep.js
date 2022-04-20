@@ -4,7 +4,6 @@ const data = require('memory.manager');
 
 module.exports =
 {
-    // Run creep roles
     run: function(creep)
     {
         // Manage Working Creep Memory
@@ -13,7 +12,7 @@ module.exports =
             data.creepMemory(creep);
         }
         
-        // if not in target room
+        // Move to targetRoom
         if (creep.memory.targetRoom !== undefined 
         && creep.pos.roomName != creep.memory.targetRoom) 
         {
@@ -21,6 +20,7 @@ module.exports =
             subroutine.moveToRoom(creep);
         }
 
+        // Run creep roles
         else
         {
             try
@@ -92,5 +92,45 @@ module.exports =
                 }
             }
         } 
+    },
+
+    // POWER CREEP
+    powerCreep: function(creep)
+    {
+        // Basic creep memory management
+        data.creepMemory(creep);
+
+        let powerSpawn = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {filter: (s) => s.structureType == STRUCTURE_POWER_SPAWN})
+
+        switch(true)
+        {
+            // Renew when about to die
+            case (creep.ticksToLive < 1000):
+                if(creep.renew(powerSpawn) === ERR_NOT_IN_RANGE) 
+                {creep.moveTo(powerSpawn, {visualizePathStyle: {stroke:'green', lineStyle: 'dotted', opacity: .5}});}
+                break;
+            
+            // Enable Power for room
+            case (!Game.rooms[creep.room.name].controller.isPowerEnabled):
+                if(creep.enableRoom(Game.rooms[creep.room.name].controller) === ERR_NOT_IN_RANGE)
+                {creep.moveTo(Game.rooms[creep.room.name].controller, {visualizePathStyle: {stroke:'red', lineStyle: 'solid', opacity: .5}});}
+                break;
+            
+            // Generate OPs
+            case ((creep.powers[PWR_GENERATE_OPS].cooldown == 0) && (creep.store.getUsedCapacity() < creep.store.getCapacity())):
+                creep.usePower(PWR_GENERATE_OPS);
+                break;
+
+            // Deposit OPs
+            case (creep.store[RESOURCE_OPS] > 90):
+                if(creep.transfer(Game.rooms[creep.room.name].storage, RESOURCE_OPS) === ERR_NOT_IN_RANGE)
+                {creep.moveTo(Game.rooms[creep.room.name].storage, {visualizePathStyle: {stroke:'green', lineStyle: 'dotted', opacity: .5}});}
+                break;
+            
+            // Run Resources
+            default:
+                roles.scientist(creep);
+                break;
+        }
     }
 };
