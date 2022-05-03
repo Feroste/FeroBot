@@ -436,7 +436,7 @@ module.exports =
         } 
         else 
         {
-            if (creep.room.terminal && _.sum(creep.room.terminal.store) < 200000) {
+            if (creep.room.terminal && _.sum(creep.room.terminal.store) < 250000) {
                 if (creep.transfer(creep.room.terminal, creep.memory.mineralType) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(creep.room.terminal, {visualizePathStyle: {stroke:'orange', lineStyle:'dotted', opacity: .5}});
                 }

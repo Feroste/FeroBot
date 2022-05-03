@@ -196,4 +196,11 @@
     -- Various Bug Fixes
     -- Simple power creep routine
 
+    1.2.2 update Log
+    ===============================
+    -- Took energy req. out of checkWorking
+    -- More Powers implemented
+    -- Terminal switch for basic resource orders
+        send resources to main room
+
 .

@@ -100,7 +100,26 @@ module.exports =
         // Basic creep memory management
         data.creepMemory(creep);
 
-        let powerSpawn = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {filter: (s) => s.structureType == STRUCTURE_POWER_SPAWN})
+        // Every Important Structure
+        let room = Game.rooms[creep.room.name];
+        let storage = room.storage;
+        let terminal = room.terminal;
+        let powerSpawn = creep.pos.findClosestByRange(FIND_MY_STRUCTURES, {filter: (s) => s.structureType == STRUCTURE_POWER_SPAWN});
+        let factory = room.find(FIND_MY_STRUCTURES, {filter: (s) => s.structureType === STRUCTURE_FACTORY});
+        
+        let sources = room.memory.sources;
+        let ungensource = undefined;
+
+        for (i = 0; i < sources.length; i++)
+        {
+            let s = sources[i];
+            let source = Game.getObjectById(s.id);
+            if (!source.effects[0])
+            {
+                ungensource = source;
+                break;
+            }
+        }
 
         switch(true)
         {
@@ -111,25 +130,71 @@ module.exports =
                 break;
             
             // Enable Power for room
-            case (!Game.rooms[creep.room.name].controller.isPowerEnabled):
-                if(creep.enableRoom(Game.rooms[creep.room.name].controller) === ERR_NOT_IN_RANGE)
-                {creep.moveTo(Game.rooms[creep.room.name].controller, {visualizePathStyle: {stroke:'red', lineStyle: 'solid', opacity: .5}});}
-                break;
-            
-            // Generate OPs
-            case ((creep.powers[PWR_GENERATE_OPS].cooldown == 0) && (creep.store.getUsedCapacity() < creep.store.getCapacity())):
-                creep.usePower(PWR_GENERATE_OPS);
+            case (!room.controller.isPowerEnabled):
+                if(creep.enableRoom(room.controller) === ERR_NOT_IN_RANGE)
+                {creep.moveTo(room.controller, {visualizePathStyle: {stroke:'red', lineStyle: 'solid', opacity: .5}});}
                 break;
 
+                    // Generate OPs
+                    case ((creep.powers[PWR_GENERATE_OPS].cooldown == 0) && (creep.store.getUsedCapacity() < creep.store.getCapacity())):
+                        creep.usePower(PWR_GENERATE_OPS);
+                        break; // Do we need to break?
+
             // Deposit OPs
-            case (creep.store[RESOURCE_OPS] > 90):
-                if(creep.transfer(Game.rooms[creep.room.name].storage, RESOURCE_OPS) === ERR_NOT_IN_RANGE)
-                {creep.moveTo(Game.rooms[creep.room.name].storage, {visualizePathStyle: {stroke:'green', lineStyle: 'dotted', opacity: .5}});}
+            case (creep.store[RESOURCE_OPS] > 190):
+                // To Storage
+                if(storage.store[RESOURCE_OPS] < 25000 && creep.transfer(storage, RESOURCE_OPS, (creep.store[RESOURCE_OPS] - 100)) === ERR_NOT_IN_RANGE)
+                {creep.moveTo(storage, {visualizePathStyle: {stroke:'green', lineStyle: 'dotted', opacity: .5}});}
+                // To Terminal
+                else if (terminal.store[RESOURCE_OPS] < 50000 && creep.transfer(terminal, RESOURCE_OPS, (creep.store[RESOURCE_OPS] - 100)) === ERR_NOT_IN_RANGE)
+                {creep.moveTo(terminal, {visualizePathStyle: {stroke:'green', lineStyle: 'dotted', opacity: .5}});}
                 break;
+
+            // Withdraw OPs
+            case (creep.store[RESOURCE_OPS] < 100):
+                // From Storage
+                if(storage.store[RESOURCE_OPS] > 0 && creep.withdraw(storage, RESOURCE_OPS, (100 - creep.store[RESOURCE_OPS])) === ERR_NOT_IN_RANGE)
+                {creep.moveTo(storage, {visualizePathStyle: {stroke:'green', lineStyle: 'dashed', opacity: .5}});}
+                // From Terminal
+                else if (terminal.store[RESOURCE_OPS] > 0 && creep.withdraw(terminal, RESOURCE_OPS, (100 - creep.store[RESOURCE_OPS])) === ERR_NOT_IN_RANGE)
+                {creep.moveTo(terminal, {visualizePathStyle: {stroke:'green', lineStyle: 'dashed', opacity: .5}});}
+                break;
+
+                // POWERS
+                    // Fill extensions
+                    case ((room.energyAvailable / room.energyCapacityAvailable) < .8) && (creep.powers[PWR_OPERATE_EXTENSION].cooldown == 0):
+                        if(creep.usePower(PWR_OPERATE_EXTENSION, storage) === ERR_NOT_IN_RANGE)
+                        {creep.moveTo(storage, {visualizePathStyle: {stroke:'yellow', lineStyle: 'solid', opacity: .5}, range: 3});}
+                        break;
+
+                    // Regen Sources
+                    case (ungensource && creep.powers[PWR_REGEN_SOURCE].cooldown == 0):
+                        if(creep.usePower(PWR_REGEN_SOURCE, ungensource) === ERR_NOT_IN_RANGE)
+                        {creep.moveTo(ungensource, {visualizePathStyle: {stroke:'yellow', lineStyle: 'dotted', opacity: .5}, range: 3});}
+                        break;
+
+                    // Increase storage at 950k usage
+                    case (storage.store.getUsedCapacity() >= 950000) && (creep.powers[PWR_OPERATE_STORAGE].cooldown == 0) && (creep.store[RESOURCE_OPS] >= 100):
+                        if(creep.usePower(PWR_OPERATE_STORAGE, storage) === ERR_NOT_IN_RANGE)
+                        {creep.moveTo(storage, {visualizePathStyle: {stroke:'yellow', lineStyle: 'dashed', opacity: .5}, range: 3});}
+                        break;
+
+                    // Power Factory (lvl 5)
+                    case ((creep.powers[PWR_OPERATE_FACTORY].level == 5) && (creep.powers[PWR_OPERATE_FACTORY].cooldown == 0) && (factory) && (!factory.effects) && (creep.store[RESOURCE_OPS] >= 100)):
+                        if(creep.usePower(PWR_OPERATE_FACTORY, factory) === ERR_NOT_IN_RANGE)
+                        {creep.moveTo(factory, {visualizePathStyle: {stroke:'orange', lineStyle: 'dashed', opacity: .5}, range:3});}
+                        break;
             
-            // Run Resources
+            // Run Power/Ghodium/Energy
             default:
-                roles.scientist(creep);
+                try
+                {
+                    roles.scientist(creep);
+                }
+                catch(ex)
+                {
+                    
+                }
                 break;
         }
     }

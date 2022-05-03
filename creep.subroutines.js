@@ -673,7 +673,7 @@ module.exports =
         if (creep.memory.working === undefined)
         {throw 'Rogue Creep';}
         // if creep is using energy but has no energy left
-        if (creep.memory.working === true && creep.carry.energy == 0) 
+        if (creep.memory.working && _.sum(creep.carry) == 0) 
         {
             if(Memory.Interface.Visualizations.Reports === true)
             {
@@ -684,7 +684,7 @@ module.exports =
             return false;
         }
         // if creep is getting energy but is full
-        else if (creep.memory.working === false && creep.carry.energy == creep.carryCapacity) 
+        else if (!creep.memory.working && _.sum(creep.carry) == creep.carryCapacity) 
         {
             if(Memory.Interface.Visualizations.Reports === true)
             {
