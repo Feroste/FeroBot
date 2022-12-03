@@ -25,7 +25,7 @@ const visuals = require('visuals');
     }
     // Power Creep
     let shyft = Game.powerCreeps['Shyft'];
-    screepLogic.powerCreep(shyft);
+    if(shyft){screepLogic.powerCreep(shyft);}
 
                /////----- Room Logic -----//////
     
@@ -36,23 +36,27 @@ const visuals = require('visuals');
         roomLogic.run(roomName);
     }
                    
-            // --- PRINT REGULAR LOG 50 ticks --- //
-    if (Game.time % 50 == 0 && Memory.Interface.Visualizations.Logs === true)
+            // --- REGULAR LOG 50 ticks --- //
+    if (Game.time % 50 == 0)
     {
-        console.log('// --- Status Report --- //');
-        console.log(`Game Tick: ${Game.time}`);
-            // if 10,000 cpu, make a pixel
-            if (Game.cpu.bucket < 10000)
-            {
-                let pixelpercent = Math.floor((Game.cpu.bucket/ 10000) * 100);
-                console.log(`Pixel Progress: ${pixelpercent}%`);
-            }
-            else
-            {
-               console.log('!!! --- !!! MADE PIXEL !!! --- !!!');
-               Game.cpu.generatePixel();
-            }
-        console.log('// --- End   Report --- //')
+        if(Memory.Interface.Visualizations.Logs === true)
+        {
+            console.log('// --- Status Report --- //');
+            console.log(`Game Tick: ${Game.time}`);
+                // if 10,000 cpu, make a pixel
+                if (Game.cpu.bucket < 10000)
+                {
+                    let pixelpercent = Math.floor((Game.cpu.bucket/ 10000) * 100);
+                    console.log(`Pixel Progress: ${pixelpercent}%`);
+                }
+                else
+                {
+                   console.log('!!! --- !!! MADE PIXEL !!! --- !!!');
+                   Game.cpu.generatePixel();
+                }
+            console.log('// --- End   Report --- //')
+        }
+        else if(Game.cpu.bucket === 10000) {Game.cpu.generatePixel();}
 
             // ALSO CLEAR DEAD CREEPS FROM MEMORY
         // check for memory entries of died creeps by iterating over Memory.creeps

@@ -1,30 +1,5 @@
 # Updates
 
-    To-Do
-    ==============================
-    -more progressive body building
-    -find closest room with enough energy for remote spawns [needs implementation]
-    -search by flag color/ name wildcards (flags dont have memory addresses try flag.pos.roomName)
-    -properly iterate over long distance harvesters so they aren't hard coded
-    -long distance mining overhaul
-        -miner/harvester
-        -build
-        -repair
-        -check for hostiles?
-    
-    
-    - Combat AI [|||--]
-    - DEFCON system [||||-]
-    - Lab Functionality [|----]
-    - Factory functionality [-----]
-    - Pickup dropped energy [|----]
-    - Whitelist / Traitor code [-----]
-    - Fallback methods for resource management [||||-]
-
-    - Empire [|||-------]
-
-
-
     1.0.1 update Log
     ==============================
     -- Added a room spawning queue to handle multiple spawns
@@ -202,5 +177,11 @@
     -- More Powers implemented
     -- Terminal switch for basic resource orders
         send resources to main room
+
+    1.2.3 update Log
+    ===============================
+    -- I have no idea
+    -- Worked on automating terminal orders
+    -- Added resource dictionary
 
 .

@@ -173,7 +173,7 @@ module.exports =
         let mineral = room.find(FIND_MINERALS)[0];
         let extractor = room.find(FIND_MY_STRUCTURES, {filter: (s) => (s.structureType === STRUCTURE_EXTRACTOR)});
         
-        if(room.energyCapacityAvailable > 1900 && extractor && mineral.mineralAmount > 0)
+        if(room.energyCapacityAvailable > 1900 && extractor && mineral.mineralAmount > 0 && room.terminal.store.getUsedCapacity() < 200000)
         {room.memory.jobs.extractorJobs = 1;}
         else
         {room.memory.jobs.extractorJobs = 0;}

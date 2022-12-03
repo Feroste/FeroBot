@@ -3,14 +3,15 @@
     Make sure to add your rooms and 'Interface' to memory watch paths so you can edit creep numbers, energy limit, and issue commands, etc.
         ex. Rooms
         ex. Interface
+    
+    - Combat AI [|----]
+    - DEFCON system [||||-]
+    - Lab Functionality [|----]
+    - Factory functionality [-----]
+    - Whitelist / Traitor code [-----]
+    - Fallback methods for resource management [||||-]
 
-    'attackFlag' = sends a number of melee attackers to the room
-
-    Buy energy
-        ex. Game.market.createOrder('buy',RESOURCE_ENERGY,.4,250000,'W39N59')
-    Manual Creep
-    Game.spawns.Spawn1.createCreep([WORK,WORK,CARRY,CARRY,MOVE,MOVE,WORK,WORK,CARRY,CARRY,MOVE,MOVE], undefined, {target: 'E14S22', role: 'harvester', working: false})
-
+    - Empire [||--------]
 
     ================================================================================
     --------------------------------------------------------------------------------
@@ -28,4 +29,11 @@
     ================================================================================
     --------------------------------------------------------------------------------
     ================================================================================
+
+        'attackFlag' = sends a number of melee attackers to the room
+
+    Buy energy
+        ex. Game.market.createOrder('buy',RESOURCE_ENERGY,.4,250000,'W39N59')
+    Manual Creep
+    Game.spawns.Spawn1.createCreep([WORK,WORK,CARRY,CARRY,MOVE,MOVE,WORK,WORK,CARRY,CARRY,MOVE,MOVE], undefined, {target: 'E14S22', role: 'harvester', working: false})
     .

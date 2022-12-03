@@ -32,7 +32,7 @@ module.exports =
                     var price = 5
                     if (orders.length)
                     {
-                        orders.sort(function(a,b){return b.price - a.price});
+                        orders.sort(function(a,b){return a.price - b.price});
 
                         if (Memory.Interface.Visualizations.Logs)
                         {
@@ -58,6 +58,39 @@ module.exports =
 
                     break;
 
+                // Buy Power in Batches
+                case (room.name === "W37S48" && terminal.store[RESOURCE_POWER] < 5000):
+                    orders = Game.market.getAllOrders(order => order.resourceType == RESOURCE_POWER &&
+                        order.type == ORDER_SELL &&
+                        Game.market.calcTransactionCost(5000, room.name, order.roomName) < 10000);
+    
+                    var price = 150
+                    if (orders.length)
+                    {
+                        orders.sort(function(a,b){return a.price - b.price});
+    
+                        if (Memory.Interface.Visualizations.Logs)
+                        {
+                            console.log('--------------------------');
+                            console.log('Power SELL orders found: ' + orders.length);
+                            
+                            console.log('Best price: ' + orders[0].price);
+                            if (orders[0].price < price)
+                            {
+                                let result = Game.market.deal(orders[0].id, 5000, room.name);
+                                if (result == 0)
+                                {
+                                console.log('Purchase completed successfully for ' + room.name);
+                                }
+                            }
+                            console.log('--------------------------');
+                        }
+                        else if (orders[0].price < price)
+                        {
+                            Game.market.deal(orders[0].id, 5000, room.name);
+                        }
+                    }
+                    break;
                 // Send Energy to Main Room 
                 //&& Game.rooms["W37S48"].storage[RESOURCE_ENERGY] < 500000 && Game.rooms["W37S48"].terminal.store.getFreeCapacity >= 20000
                 case(room.name != "W37S48" && room.terminal.store[RESOURCE_ENERGY] > 40000):
@@ -101,14 +134,31 @@ module.exports =
                     break;
             }
         }
+
+        // Create and Manage orders every 33 ticks
         else
         {
-            orders = Game.market.orders;
+            return;
+            
+            if(Game.time % 33 === 0)
+            {
+                // BUY ORDERS
+                switch(true)
+                {
+                   
+                }
 
-            // switch(true)
-            // {
-            //     case (room.storage.store[RESOURCE_ENERGY] < 100000 && room.memory)
-            // }
+                
+                // SELL ORDERS
+                for (resource in global.allResources)
+                {
+                    // If more than 100k of a resource, create a sell order for it
+                    if(terminal.store[resource] >= 100000)
+                    {
+
+                    }
+                }
+            }
         }
     }
 };

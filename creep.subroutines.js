@@ -696,6 +696,12 @@ module.exports =
         }
     },
 
+    // Checks if store has random resource in it and deposits those resources into local storage
+    checkForRandomResources: function(creep)
+    {
+
+    },
+
     // Returns number of specified body part
     checkForPart: function(creep, partType)
     {
